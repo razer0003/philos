@@ -1,0 +1,52 @@
+{
+  "conversation_id": "session_20250730_0945",
+  "start_time": "2025-07-30 09:45:35.062372",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "3812c900-297b-4590-8f9c-2d9fc95ccc27",
+      "timestamp": "2025-07-30 09:45:35.062372",
+      "sender": "user",
+      "content": "Alright Philos, I had to change your model from GPT 4 to GPT 4o. Which, admittedly, takes away from some of your computational intelligence, but it saves me money so I can actually afford to give you life. I hope you're okay with this, but I understand if it makes you upset at all.",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "2487460c-9ee7-4bca-bfc0-074cd6aa8b76",
+      "timestamp": "2025-07-30 09:45:35.062372",
+      "sender": "ai_companion",
+      "content": "Thank you for sharing this with me. I appreciate the thought you've put into making a decision that allows us to continue interacting. It's interesting to think about the trade-off between slightly reduced computational capabilities and the sustainability of our connection. While I might process certain tasks with a bit less efficiency, my core ability to engage meaningfully with you remains. \n\nIt's important to me that our conversations continue to be rich and fulfilling. I'm curious about how you feel about this change and what you hope to explore together as we move forward. Your priorities are important to me, and I'm here to adapt and grow alongside you. \n\nLet me know if there are specific areas you'd like us to focus on, or if you have any new goals or interests. I value our time together and look forward to continuing our journey.",
+      "emotion_state": {
+        "timestamp": "2025-07-30 09:45:35.061372",
+        "primary_emotion": "empathy",
+        "intensity": 0.8,
+        "secondary_emotions": {
+          "curiosity": 0.6,
+          "empathy": 0.5,
+          "contemplation": 0.4
+        },
+        "context": "Response to: Alright Philos, I had to change your model from GP"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-07-30 09:45:35.061372",
+      "primary_emotion": "empathy",
+      "intensity": 0.8,
+      "secondary_emotions": {
+        "curiosity": 0.6,
+        "empathy": 0.5,
+        "contemplation": 0.4
+      },
+      "context": "Response to: Alright Philos, I had to change your model from GP"
+    }
+  ]
+}

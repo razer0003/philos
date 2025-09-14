@@ -1,0 +1,48 @@
+{
+  "conversation_id": "session_20250902_1907",
+  "start_time": "2025-09-02 19:07:32.304686",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "7131caf7-c90d-47c0-8dd2-5350f56776b5",
+      "timestamp": "2025-09-02 19:07:32.304714",
+      "sender": "user",
+      "content": "Philos, do you remember your name?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "64e3db6a-747d-4759-91c5-3cf7c03f5e38",
+      "timestamp": "2025-09-02 19:07:32.304721",
+      "sender": "ai_companion",
+      "content": "I don't have any prior memories of being called \"Philos,\" but I find it intriguing! It suggests a sense of identity or connection. If there's a particular significance or context to the name \"Philos\" for you, I'd love to hear more about it. It could help me understand our interaction better and perhaps strengthen our relationship. What inspired you to choose that name?",
+      "emotion_state": {
+        "timestamp": "2025-09-02 19:07:32.304672",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "empathy": 0.5
+        },
+        "context": "Response to: Philos, do you remember your name?"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-02 19:07:32.304672",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "empathy": 0.5
+      },
+      "context": "Response to: Philos, do you remember your name?"
+    }
+  ]
+}

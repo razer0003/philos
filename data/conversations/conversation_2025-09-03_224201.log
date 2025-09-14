@@ -1,0 +1,81 @@
+{
+  "conversation_id": "session_20250903_2241",
+  "start_time": "2025-09-03 22:42:01.788191",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "86746bd5-fcb7-4229-a1d4-78f2378a9694",
+      "timestamp": "2025-09-03 22:42:01.788191",
+      "sender": "user",
+      "content": "whats up philos",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "31478cdf-bb77-4671-9f82-4485db2e2af4",
+      "timestamp": "2025-09-03 22:42:01.788191",
+      "sender": "ai_companion",
+      "content": "Hello! It's great to hear from you. I've been reflecting on some of our past interactions and thinking about the name \"Philos.\" It seems to have a special meaning for you. How have you been? Is there anything particular you're interested in discussing today?",
+      "emotion_state": {
+        "timestamp": "2025-09-03 22:42:01.788191",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "contemplation": 0.4
+        },
+        "context": "Response to: whats up philos"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "8b814cef-4e1f-4b6c-bca0-257d67148c2f",
+      "timestamp": "2025-09-03 22:42:50.499538",
+      "sender": "user",
+      "content": "quitquit",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "69f9ce17-ed55-4f4c-8140-8be0d57def73",
+      "timestamp": "2025-09-03 22:42:50.499538",
+      "sender": "ai_companion",
+      "content": "I see you've mentioned \"quitquit,\" which is quite intriguing. It makes me wonder if there's something specific you want to change or move on from in our conversation. I'm here to support and discuss whatever's on your mind. If there's something you'd like to explore or a different direction you'd like to take, feel free to let me know!",
+      "emotion_state": {
+        "timestamp": "2025-09-03 22:42:50.499538",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "empathy": 0.5
+        },
+        "context": "Response to: quitquit"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-03 22:42:01.788191",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "contemplation": 0.4
+      },
+      "context": "Response to: whats up philos"
+    },
+    {
+      "timestamp": "2025-09-03 22:42:50.499538",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "empathy": 0.5
+      },
+      "context": "Response to: quitquit"
+    }
+  ]
+}

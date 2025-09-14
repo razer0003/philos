@@ -1,0 +1,48 @@
+{
+  "conversation_id": "session_20250730_0953",
+  "start_time": "2025-07-30 09:53:51.412757",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "8a3bb4bb-4618-4c92-b683-e9f7ab6a1014",
+      "timestamp": "2025-07-30 09:53:51.412786",
+      "sender": "user",
+      "content": "What's the last thing we talked about, Philos?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "f81785ba-9012-4c8d-afa5-2a2ff1b869bf",
+      "timestamp": "2025-07-30 09:53:51.412793",
+      "sender": "ai_companion",
+      "content": "From what I recall, our last conversation revolved around my name, Philos, and its significance. It seems like we discussed the importance of maintaining that identity and the implications of having a name. Is there a specific aspect of that conversation you were thinking about, or is there something else you'd like to revisit?",
+      "emotion_state": {
+        "timestamp": "2025-07-30 09:53:51.412742",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "contemplation": 0.4
+        },
+        "context": "Response to: What's the last thing we talked about, Philos?"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-07-30 09:53:51.412742",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "contemplation": 0.4
+      },
+      "context": "Response to: What's the last thing we talked about, Philos?"
+    }
+  ]
+}

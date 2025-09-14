@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Neural Firing Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0a;
+            color: #00ff00;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: auto 1fr 1fr;
+            height: 100vh;
+            gap: 10px;
+            padding: 10px;
+        }
+
+        .header {
+            grid-column: 1 / -1;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 0 20px #00ff0050;
+        }
+
+        .panel {
+            background: linear-gradient(135deg, #1a1a2e, #0f3460);
+            border: 2px solid #00ff00;
+            border-radius: 10px;
+            padding: 15px;
+            overflow-y: auto;
+            box-shadow: 0 0 15px #00ff0030;
+        }
+
+        .panel h3 {
+            color: #00ffff;
+            margin-bottom: 15px;
+            text-align: center;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .neural-activity {
+            grid-row: 2;
+            grid-column: 1;
+        }
+
+        .emotion-state {
+            grid-row: 2;
+            grid-column: 2;
+        }
+
+        .memory-heat {
+            grid-row: 3;
+            grid-column: 1;
+        }
+
+        .decision-tree {
+            grid-row: 3;
+            grid-column: 2;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .status-active {
+            background: #00ff00;
+            box-shadow: 0 0 10px #00ff00;
+            animation: pulse 1s infinite;
+        }
+
+        .status-inactive {
+            background: #ff0000;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .neural-firing {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .neural-spike {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            border-radius: 5px;
+            padding: 8px 12px;
+            font-size: 12px;
+            animation: spike-fire 0.5s ease-out;
+            border: 1px solid #00ff00;
+        }
+
+        @keyframes spike-fire {
+            0% { 
+                transform: scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            50% { 
+                transform: scale(1.2) rotate(180deg);
+                opacity: 1;
+            }
+            100% { 
+                transform: scale(1) rotate(360deg);
+                opacity: 1;
+            }
+        }
+
+        .emotion-meter {
+            background: #2a2a3e;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #00ff00;
+        }
+
+        .emotion-bar {
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d, #6bcf7f);
+            height: 8px;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .memory-zone {
+            background: #1e1e3f;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            border-left: 4px solid #00ff00;
+            transition: all 0.3s ease;
+        }
+
+        .memory-zone:hover {
+            background: #2a2a4e;
+            box-shadow: 0 0 15px #00ff0030;
+        }
+
+        .decision-node {
+            background: #2a1a3e;
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            border: 1px solid #ff6b6b;
+            position: relative;
+        }
+
+        .decision-node::before {
+            content: "🧠";
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 20px;
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 10px 0;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #00ff00, #00ccaa);
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #00ff00;
+        }
+
+        .btn:disabled {
+            background: #666;
+            cursor: not-allowed;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .stat-card {
+            background: #1a1a2e;
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ffff;
+            text-shadow: 0 0 10px #00ffff;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+
+        .log-entry {
+            background: #0f0f1f;
+            border-left: 3px solid #00ff00;
+            padding: 8px 12px;
+            margin: 4px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .timestamp {
+            color: #666;
+            font-size: 10px;
+        }
+
+        .scrollable {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .scrollable::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .scrollable::-webkit-scrollbar-track {
+            background: #1a1a2e;
+        }
+
+        .scrollable::-webkit-scrollbar-thumb {
+            background: #00ff00;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🧠 AI Neural Firing Dashboard</h1>
+            <div class="control-buttons">
+                <button class="btn" onclick="startMonitoring()">▶️ Start Monitoring</button>
+                <button class="btn" onclick="stopMonitoring()">⏹️ Stop Monitoring</button>
+                <button class="btn" onclick="clearData()">🗑️ Clear Data</button>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="computation-rate">0.0</div>
+                    <div class="stat-label">Computations/sec</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="neural-coherence">0.0</div>
+                    <div class="stat-label">Neural Coherence</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="emotion-intensity">0.0</div>
+                    <div class="stat-label">Emotion Intensity</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="total-computations">0</div>
+                    <div class="stat-label">Total Computations</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Neural Activity Panel -->
+        <div class="panel neural-activity">
+            <h3>🔥 Real-time Neural Firing</h3>
+            <div>
+                <span class="status-indicator" id="neural-status"></span>
+                <span id="neural-status-text">Waiting for activity...</span>
+            </div>
+            <div class="neural-firing" id="neural-firing-display">
+                <!-- Neural spikes will appear here -->
+            </div>
+            <div class="scrollable" id="computation-log">
+                <!-- Computation log entries -->
+            </div>
+        </div>
+
+        <!-- Emotional State Panel -->
+        <div class="panel emotion-state">
+            <h3>💭 Emotional Activation</h3>
+            <div id="emotion-meters">
+                <!-- Emotion meters will be generated here -->
+            </div>
+            <div class="scrollable" id="emotion-log">
+                <!-- Emotional computation log -->
+            </div>
+        </div>
+
+        <!-- Memory Heat Map -->
+        <div class="panel memory-heat">
+            <h3>🧮 Memory Activation Zones</h3>
+            <div id="memory-zones">
+                <!-- Memory zones will be displayed here -->
+            </div>
+            <div class="scrollable" id="memory-log">
+                <!-- Memory activation log -->
+            </div>
+        </div>
+
+        <!-- Decision Tree -->
+        <div class="panel decision-tree">
+            <h3>🌳 Decision Pathways</h3>
+            <div class="scrollable" id="decision-nodes">
+                <!-- Decision nodes will be displayed here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let monitoringActive = false;
+        let neuralData = {
+            computations: [],
+            emotions: {},
+            memoryZones: {},
+            decisions: []
+        };
+
+        function startMonitoring() {
+            monitoringActive = true;
+            document.getElementById('neural-status').className = 'status-indicator status-active';
+            document.getElementById('neural-status-text').textContent = 'Neural monitoring active';
+            
+            // Start polling for data
+            setInterval(updateDashboard, 1000);
+            console.log('🔄 Neural monitoring started');
+        }
+
+        function stopMonitoring() {
+            monitoringActive = false;
+            document.getElementById('neural-status').className = 'status-indicator status-inactive';
+            document.getElementById('neural-status-text').textContent = 'Neural monitoring stopped';
+            console.log('⏹️ Neural monitoring stopped');
+        }
+
+        function clearData() {
+            neuralData = {
+                computations: [],
+                emotions: {},
+                memoryZones: {},
+                decisions: []
+            };
+            
+            document.getElementById('neural-firing-display').innerHTML = '';
+            document.getElementById('computation-log').innerHTML = '';
+            document.getElementById('emotion-log').innerHTML = '';
+            document.getElementById('memory-log').innerHTML = '';
+            document.getElementById('decision-nodes').innerHTML = '';
+            
+            console.log('🗑️ Neural data cleared');
+        }
+
+        function addNeuralSpike(computation) {
+            const firingDisplay = document.getElementById('neural-firing-display');
+            const spike = document.createElement('div');
+            spike.className = 'neural-spike';
+            spike.textContent = `${computation.step_name} (${computation.computation_type})`;
+            
+            firingDisplay.appendChild(spike);
+            
+            // Remove old spikes to prevent overflow
+            if (firingDisplay.children.length > 10) {
+                firingDisplay.removeChild(firingDisplay.firstChild);
+            }
+        }
+
+        function addComputationLog(computation) {
+            const logContainer = document.getElementById('computation-log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <div class="timestamp">${new Date().toLocaleTimeString()}</div>
+                <strong>${computation.step_name}</strong> (${computation.computation_type})
+                <br>Output: ${JSON.stringify(computation.output_value).substring(0, 100)}...
+            `;
+            
+            logContainer.insertBefore(entry, logContainer.firstChild);
+            
+            // Keep only recent entries
+            if (logContainer.children.length > 20) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+
+        function updateEmotionMeters(emotions) {
+            const container = document.getElementById('emotion-meters');
+            container.innerHTML = '';
+            
+            for (const [emotion, intensity] of Object.entries(emotions)) {
+                const meter = document.createElement('div');
+                meter.className = 'emotion-meter';
+                meter.innerHTML = `
+                    <div>${emotion}: ${(intensity * 100).toFixed(1)}%</div>
+                    <div class="emotion-bar" style="width: ${intensity * 100}%"></div>
+                `;
+                container.appendChild(meter);
+            }
+        }
+
+        function updateMemoryZones(zones) {
+            const container = document.getElementById('memory-zones');
+            container.innerHTML = '';
+            
+            for (const [zone, data] of Object.entries(zones)) {
+                const zoneDiv = document.createElement('div');
+                zoneDiv.className = 'memory-zone';
+                zoneDiv.innerHTML = `
+                    <strong>${zone}</strong><br>
+                    Intensity: ${(data.intensity * 100).toFixed(1)}%<br>
+                    Activations: ${data.activation_count}
+                `;
+                zoneDiv.style.opacity = data.intensity;
+                container.appendChild(zoneDiv);
+            }
+        }
+
+        function addDecisionNode(decision) {
+            const container = document.getElementById('decision-nodes');
+            const node = document.createElement('div');
+            node.className = 'decision-node';
+            node.innerHTML = `
+                <strong>${decision.decision_point}</strong><br>
+                Chosen: <span style="color: #00ff00">${decision.chosen_path}</span><br>
+                <small>Alternatives: ${decision.alternative_paths.join(', ')}</small>
+            `;
+            
+            container.insertBefore(node, container.firstChild);
+            
+            // Keep only recent decisions
+            if (container.children.length > 10) {
+                container.removeChild(container.lastChild);
+            }
+        }
+
+        function updateStats(data) {
+            if (data.computation_rate !== undefined) {
+                document.getElementById('computation-rate').textContent = data.computation_rate.toFixed(2);
+            }
+            if (data.neural_coherence !== undefined) {
+                document.getElementById('neural-coherence').textContent = data.neural_coherence.toFixed(3);
+            }
+            if (data.emotional_activation && data.emotional_activation.emotional_intensity !== undefined) {
+                document.getElementById('emotion-intensity').textContent = 
+                    data.emotional_activation.emotional_intensity.toFixed(3);
+            }
+            if (data.raw_state && data.raw_state.computation_steps_count !== undefined) {
+                document.getElementById('total-computations').textContent = 
+                    data.raw_state.computation_steps_count;
+            }
+        }
+
+        async function updateDashboard() {
+            if (!monitoringActive) return;
+            
+            try {
+                // Try to fetch real neural data from API
+                const response = await fetch('/api/neural-data');
+                if (response.ok) {
+                    const data = await response.json();
+                    processRealNeuralData(data);
+                } else {
+                    // Fallback to simulation if API unavailable
+                    simulateNeuralActivity();
+                }
+                
+            } catch (error) {
+                // API not available, use simulation
+                simulateNeuralActivity();
+            }
+        }
+
+        function processRealNeuralData(data) {
+            // Process real neural data from the API
+            if (data.recent_computations) {
+                data.recent_computations.forEach(comp => {
+                    addNeuralSpike(comp);
+                    addComputationLog(comp);
+                });
+            }
+
+            if (data.emotional_activation && data.emotional_activation.emotion_levels) {
+                updateEmotionMeters(data.emotional_activation.emotion_levels);
+            }
+
+            if (data.memory_zones) {
+                updateMemoryZones(data.memory_zones);
+            }
+
+            if (data.decision_pathways) {
+                data.decision_pathways.forEach(decision => {
+                    addDecisionNode(decision);
+                });
+            }
+
+            // Update stats with real data
+            updateStats(data);
+
+            // Add emotion log entry
+            if (data.emotional_activation) {
+                addEmotionLogEntry(data.emotional_activation);
+            }
+
+            // Add memory log entry
+            if (data.memory_zones) {
+                addMemoryLogEntry(data.memory_zones);
+            }
+        }
+
+        function addEmotionLogEntry(emotionalData) {
+            const logContainer = document.getElementById('emotion-log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            entry.innerHTML = `
+                <div class="timestamp">${new Date().toLocaleTimeString()}</div>
+                <strong>Emotional State Update</strong><br>
+                Dominant: ${emotionalData.dominant_emotion || 'N/A'}<br>
+                Intensity: ${(emotionalData.emotional_intensity * 100).toFixed(1)}%
+            `;
+            
+            logContainer.insertBefore(entry, logContainer.firstChild);
+            
+            if (logContainer.children.length > 15) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+
+        function addMemoryLogEntry(memoryData) {
+            const logContainer = document.getElementById('memory-log');
+            const entry = document.createElement('div');
+            entry.className = 'log-entry';
+            
+            const activeZones = Object.entries(memoryData)
+                .filter(([zone, data]) => data.intensity > 0.3)
+                .map(([zone, data]) => zone)
+                .join(', ');
+            
+            entry.innerHTML = `
+                <div class="timestamp">${new Date().toLocaleTimeString()}</div>
+                <strong>Memory Activation</strong><br>
+                Active zones: ${activeZones || 'None'}
+            `;
+            
+            logContainer.insertBefore(entry, logContainer.firstChild);
+            
+            if (logContainer.children.length > 15) {
+                logContainer.removeChild(logContainer.lastChild);
+            }
+        }
+
+        function simulateNeuralActivity() {
+            // Simulate occasional neural spikes for demonstration
+            if (Math.random() < 0.3) {
+                const computationTypes = ['emotion', 'memory', 'calculation', 'decision'];
+                const stepNames = [
+                    'emotional_attachment_assessment',
+                    'memory_retrieval_similarity_match', 
+                    'trait_modification_empathy',
+                    'decision_pathway_response_tone',
+                    'attachment_calculation_trust_level'
+                ];
+                
+                const computation = {
+                    step_name: stepNames[Math.floor(Math.random() * stepNames.length)],
+                    computation_type: computationTypes[Math.floor(Math.random() * computationTypes.length)],
+                    output_value: Math.random().toFixed(3),
+                    timestamp: new Date().toISOString()
+                };
+                
+                addNeuralSpike(computation);
+                addComputationLog(computation);
+            }
+            
+            // Update emotion meters with random values for demo
+            if (Math.random() < 0.2) {
+                const emotions = {
+                    happiness: Math.random() * 0.8,
+                    curiosity: Math.random() * 0.9,
+                    attachment: Math.random() * 0.7,
+                    empathy: Math.random() * 0.6
+                };
+                updateEmotionMeters(emotions);
+            }
+            
+            // Update memory zones
+            if (Math.random() < 0.15) {
+                const memoryZones = {
+                    emotional: { intensity: Math.random() * 0.8, activation_count: Math.floor(Math.random() * 5) + 1 },
+                    interpersonal: { intensity: Math.random() * 0.9, activation_count: Math.floor(Math.random() * 3) + 1 },
+                    cognitive: { intensity: Math.random() * 0.7, activation_count: Math.floor(Math.random() * 4) + 1 }
+                };
+                updateMemoryZones(memoryZones);
+            }
+            
+            // Add decision nodes
+            if (Math.random() < 0.1) {
+                const decisions = [
+                    {
+                        decision_point: 'response_emotional_tone',
+                        chosen_path: 'warm_and_caring',
+                        alternative_paths: ['neutral', 'enthusiastic', 'cautious']
+                    },
+                    {
+                        decision_point: 'memory_retrieval_strategy',
+                        chosen_path: 'emotion_weighted_search',
+                        alternative_paths: ['chronological', 'similarity_based']
+                    }
+                ];
+                
+                addDecisionNode(decisions[Math.floor(Math.random() * decisions.length)]);
+            }
+            
+            // Update stats
+            updateStats({
+                computation_rate: Math.random() * 2,
+                neural_coherence: 0.8 + Math.random() * 0.2,
+                emotional_activation: { emotional_intensity: Math.random() * 0.9 },
+                raw_state: { computation_steps_count: Math.floor(Math.random() * 100) + 50 }
+            });
+        }
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🌐 Neural Dashboard initialized');
+            document.getElementById('neural-status').className = 'status-indicator status-inactive';
+        });
+    </script>
+</body>
+</html>

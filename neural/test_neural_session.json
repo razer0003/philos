@@ -1,0 +1,23 @@
+{
+  "session_info": {
+    "session_id": "session_1756851799",
+    "timestamp": "2025-09-02T18:23:19.374111",
+    "monitoring_duration": 0.3741116523742676
+  },
+  "computation_log": [],
+  "memory_activations": [],
+  "trait_deltas": [],
+  "decision_points": [],
+  "emotional_computations": [],
+  "statistics": {
+    "total_computations": 0,
+    "computation_types": {},
+    "emotion_types_processed": {},
+    "most_active_traits": [],
+    "decision_patterns": {
+      "most_common_paths": {},
+      "total_decisions": 0
+    },
+    "average_memory_activation": 0.0
+  }
+}

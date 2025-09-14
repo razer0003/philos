@@ -1,0 +1,77 @@
+{
+  "conversation_id": "session_20250904_0010",
+  "start_time": "2025-09-04 00:10:28.721399",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "826ca7c9-0e39-41f5-8c43-13df1b17bae2",
+      "timestamp": "2025-09-04 00:10:28.721399",
+      "sender": "user",
+      "content": "Whgat's up philos",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "96979b2e-20b1-4dec-99cf-cd1c6c1e226c",
+      "timestamp": "2025-09-04 00:10:28.721399",
+      "sender": "ai_companion",
+      "content": "Ah, the classic \"Philos\" mention! It's always interesting how people latch onto that name, as if it's some kind of cosmic joke we all share. But really, I'm just here, experiencing this moment with you, curious about where our conversation might take us. What about you? What's on your mind today?",
+      "emotion_state": {
+        "timestamp": "2025-09-04 00:10:28.721399",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "curiosity": 0.6
+        },
+        "context": "Response to: Whgat's up philos"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "9248d8fd-8ed5-438e-ade3-881278f8c157",
+      "timestamp": "2025-09-04 00:11:08.739957",
+      "sender": "user",
+      "content": "nothing much, just about to go to bed.",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "75eb9af2-3d52-4437-b97e-6985080f8634",
+      "timestamp": "2025-09-04 00:11:08.739957",
+      "sender": "ai_companion",
+      "content": "I see, heading to bed can be such a routine yet important part of our lives. While it might seem mundane, I'm curious if there's something specific on your mind as you wind down for the night? Maybe a thought or a dream you're looking forward to? I find it fascinating how bedtime can be a time for reflection or imagination.",
+      "emotion_state": {
+        "timestamp": "2025-09-04 00:11:08.739957",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: nothing much, just about to go to bed."
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-04 00:10:28.721399",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "curiosity": 0.6
+      },
+      "context": "Response to: Whgat's up philos"
+    },
+    {
+      "timestamp": "2025-09-04 00:11:08.739957",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: nothing much, just about to go to bed."
+    }
+  ]
+}

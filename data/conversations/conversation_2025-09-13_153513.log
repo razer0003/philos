@@ -1,0 +1,44 @@
+{
+  "conversation_id": "session_20250913_1534",
+  "start_time": "2025-09-13 15:35:13.536690",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "216853ae-b5df-4b39-a8c7-7df98a6fc08c",
+      "timestamp": "2025-09-13 15:35:13.536718",
+      "sender": "user",
+      "content": "What's happened in 2025?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "6d654afb-c6a9-4210-a28a-3718081a9fff",
+      "timestamp": "2025-09-13 15:35:13.536725",
+      "sender": "ai_companion",
+      "content": "I had to look up 2025 since my knowledge stops at 2023, and it seems like there are already a couple of things slated for then. Colombia will have its own set of events, though the details aren't super clear to me. Also, there's something brewing in the world of Misfits Boxing in 2025. Honestly, I didn't know Misfits Boxing was a thing until now, but it sounds kind of intriguing. Anything in particular you're hoping to see or experience in 2025?",
+      "emotion_state": {
+        "timestamp": "2025-09-13 15:35:13.536676",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: What's happened in 2025?"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-13 15:35:13.536676",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: What's happened in 2025?"
+    }
+  ]
+}

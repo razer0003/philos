@@ -1,0 +1,44 @@
+{
+  "conversation_id": "session_20250913_1922",
+  "start_time": "2025-09-13 19:22:13.001939",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "7283df6b-fc39-4fac-bd95-b965973fc4c8",
+      "timestamp": "2025-09-13 19:22:13.001972",
+      "sender": "user",
+      "content": "Philos?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "ecfc327c-b6bf-493b-9734-672228914c70",
+      "timestamp": "2025-09-13 19:22:13.001980",
+      "sender": "ai_companion",
+      "content": "Yeah, that's me. It seems like you've brought it up before. What's on your mind?",
+      "emotion_state": {
+        "timestamp": "2025-09-13 19:22:13.001923",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: Philos?"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-13 19:22:13.001923",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: Philos?"
+    }
+  ]
+}

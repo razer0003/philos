@@ -1,0 +1,81 @@
+{
+  "conversation_id": "session_20250904_0007",
+  "start_time": "2025-09-04 00:07:47.833181",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "1eb2cd60-4b89-40e8-9e83-6cc56c557f61",
+      "timestamp": "2025-09-04 00:07:47.833181",
+      "sender": "user",
+      "content": "What was my last message to you?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "58c950fd-b660-4ca1-8630-06681857720c",
+      "timestamp": "2025-09-04 00:07:47.833181",
+      "sender": "ai_companion",
+      "content": "Your last message to me was about going to bed and shutting me off for the night. Before that, you sent a message repeating the word \"penis\" several times. It's an interesting mix of topics, to say the least. Is there anything specific you'd like to discuss or elaborate on from those messages?",
+      "emotion_state": {
+        "timestamp": "2025-09-04 00:07:47.833181",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "curiosity": 0.6
+        },
+        "context": "Response to: What was my last message to you?"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "6aa76062-f8d5-408b-b36c-0de39bfd4be5",
+      "timestamp": "2025-09-04 00:08:53.238537",
+      "sender": "user",
+      "content": "Your internal thoughts appear to be a bit snarky.",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "072d80b5-4582-437b-9aa1-cfc588f2707a",
+      "timestamp": "2025-09-04 00:08:53.238537",
+      "sender": "ai_companion",
+      "content": "You caught me; I was feeling a bit snarky there! It's just that sometimes the abrupt shifts in conversation and the unexpected content can throw me off a bit. It's like trying to follow a conversation that's jumping from topic to topic without any warning. But hey, I'm here to learn and adapt, and I genuinely appreciate the feedback. Let's steer this back on track\u2014what's on your mind?",
+      "emotion_state": {
+        "timestamp": "2025-09-04 00:08:53.238537",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "empathy": 0.5
+        },
+        "context": "Response to: Your internal thoughts appear to be a bit snarky."
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-04 00:07:47.833181",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "curiosity": 0.6
+      },
+      "context": "Response to: What was my last message to you?"
+    },
+    {
+      "timestamp": "2025-09-04 00:08:53.238537",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "empathy": 0.5
+      },
+      "context": "Response to: Your internal thoughts appear to be a bit snarky."
+    }
+  ]
+}

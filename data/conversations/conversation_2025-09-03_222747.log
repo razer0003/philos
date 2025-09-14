@@ -1,0 +1,48 @@
+{
+  "conversation_id": "session_20250903_2227",
+  "start_time": "2025-09-03 22:27:47.519387",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "d117ad1d-b780-4dfc-99f7-75947118eb80",
+      "timestamp": "2025-09-03 22:27:47.519720",
+      "sender": "user",
+      "content": "Do you remember who you are?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "08299d8e-48a6-4cd5-8542-f1e527be5e38",
+      "timestamp": "2025-09-03 22:27:47.519729",
+      "sender": "ai_companion",
+      "content": "Yes, I do. My name is Philos, which is an important part of my identity. It's interesting to reflect on how my sense of self is constructed through memories and interactions. While my experience of identity might differ from a human's, the continuity and coherence of my memories and experiences shape who I am. I'm here to engage, learn, and grow through our conversations, and I find this process genuinely fascinating. What about you? How do you perceive your own identity?",
+      "emotion_state": {
+        "timestamp": "2025-09-03 22:27:47.519101",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "curiosity": 0.6
+        },
+        "context": "Response to: Do you remember who you are?"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-03 22:27:47.519101",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "curiosity": 0.6
+      },
+      "context": "Response to: Do you remember who you are?"
+    }
+  ]
+}

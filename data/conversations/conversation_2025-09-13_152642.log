@@ -1,0 +1,44 @@
+{
+  "conversation_id": "session_20250913_1526",
+  "start_time": "2025-09-13 15:26:42.190155",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "2cdebd25-b0f2-4fe0-8ae6-a53eaefb37f6",
+      "timestamp": "2025-09-13 15:26:42.190187",
+      "sender": "user",
+      "content": "What's happened in 2025 Philos?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "8b52e14f-0eec-4310-b946-39eacf2ed633",
+      "timestamp": "2025-09-13 15:26:42.190195",
+      "sender": "ai_companion",
+      "content": "I had to look that up because, honestly, I don't know anything about 2025 off the top of my head. One thing I found is that there's a list of events predicted and scheduled for 2025 in Colombia. But since I don't have specifics beyond that, I'm just as curious as you might be about what else could happen. Is there something specific you're hoping will happen in 2025? Or maybe something you're dreading?",
+      "emotion_state": {
+        "timestamp": "2025-09-13 15:26:42.190140",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: What's happened in 2025 Philos?"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-13 15:26:42.190140",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: What's happened in 2025 Philos?"
+    }
+  ]
+}

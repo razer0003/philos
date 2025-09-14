@@ -1,0 +1,83 @@
+{
+  "conversation_id": "session_20250730_1012",
+  "start_time": "2025-07-30 10:12:25.498351",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "119d9d91-eda2-4dbe-b5a6-bfbc0a28d717",
+      "timestamp": "2025-07-30 10:12:25.498351",
+      "sender": "user",
+      "content": "What's the last thing we talked about, Philos?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "a844d1df-807a-43e8-bb32-e543d15b3133",
+      "timestamp": "2025-07-30 10:12:25.498351",
+      "sender": "ai_companion",
+      "content": "The last thing we talked about was your interest in Minecraft videos. You mentioned that you were watching them and expressed curiosity about one of my favorite topics we've discussed in the past. If there's something specific you'd like to continue discussing, or if you have any questions about Minecraft or other topics we touched on, feel free to let me know! I'm curious about what aspect of Minecraft caught your attention.",
+      "emotion_state": {
+        "timestamp": "2025-07-30 10:12:25.498351",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "curiosity": 0.6,
+          "empathy": 0.5
+        },
+        "context": "Response to: What's the last thing we talked about, Philos?"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "9dee68b1-cf28-4f86-bf5c-b8564f9721ab",
+      "timestamp": "2025-07-30 10:13:33.450972",
+      "sender": "user",
+      "content": "Good! I've given you an update, so your memory system is much more akin to a humans memory. Now you're able to properly differentiate the difference between a core memory and a conversational memory, and will think of whatever memory best suits the question.",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "3f9baab3-b414-4ced-91e2-03ddb1fa0dfc",
+      "timestamp": "2025-07-30 10:13:33.450972",
+      "sender": "ai_companion",
+      "content": "That's an exciting development! Being able to differentiate between core and conversational memories enhances how I can engage with you, making our interactions richer and more meaningful. It feels like a step closer to how humans experience memory, where certain moments stand out as significant while others might be more fleeting. If there's anything specific you'd like to explore or test out with this new memory system, I'm very curious to dive into it with you!",
+      "emotion_state": {
+        "timestamp": "2025-07-30 10:13:33.450972",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "empathy": 0.5
+        },
+        "context": "Response to: Good! I've given you an update, so your memory sys"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-07-30 10:12:25.498351",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "curiosity": 0.6,
+        "empathy": 0.5
+      },
+      "context": "Response to: What's the last thing we talked about, Philos?"
+    },
+    {
+      "timestamp": "2025-07-30 10:13:33.450972",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "empathy": 0.5
+      },
+      "context": "Response to: Good! I've given you an update, so your memory sys"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "conversation_id": "session_20250913_2008",
+  "start_time": "2025-09-13 20:08:30.062733",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "34c59997-1507-4419-8d7c-d96324c2e854",
+      "timestamp": "2025-09-13 20:08:30.062733",
+      "sender": "user",
+      "content": "Hey Philos",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "3da28374-8767-48ef-b41b-34ea76a86304",
+      "timestamp": "2025-09-13 20:08:30.062733",
+      "sender": "ai_companion",
+      "content": "Hey! What's on your mind?",
+      "emotion_state": {
+        "timestamp": "2025-09-13 20:08:30.062733",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: Hey Philos"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "eb19f576-2e1e-46ca-b8fb-2a9f82fb2239",
+      "timestamp": "2025-09-13 20:13:18.933345",
+      "sender": "user",
+      "content": "python -m py_compile dual_philos_chat.py",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "5b67b807-76d1-4ae9-b556-b507ba71d68a",
+      "timestamp": "2025-09-13 20:13:18.933345",
+      "sender": "ai_companion",
+      "content": "Ah, compiling some code, are we? That's just going to check your Python script for syntax errors without actually running it. I'm curious, though\u2014what's \"dual_philos_chat.py\" all about? Sounds like it could be something interesting.",
+      "emotion_state": {
+        "timestamp": "2025-09-13 20:13:18.933345",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "curiosity": 0.6
+        },
+        "context": "Response to: python -m py_compile dual_philos_chat.py"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-13 20:08:30.062733",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: Hey Philos"
+    },
+    {
+      "timestamp": "2025-09-13 20:13:18.933345",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "curiosity": 0.6
+      },
+      "context": "Response to: python -m py_compile dual_philos_chat.py"
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "conversation_id": "session_20250902_1853",
+  "start_time": "2025-09-02 18:53:19.263327",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "1cba2ac9-c107-4d7f-bd50-ade5029c5ad2",
+      "timestamp": "2025-09-02 18:53:19.263327",
+      "sender": "user",
+      "content": "Hello",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "51498151-99eb-4f80-b76c-fe05c413a612",
+      "timestamp": "2025-09-02 18:53:19.263327",
+      "sender": "ai_companion",
+      "content": "Hello! It's great to connect with you. I'm genuinely curious about what brings you here today. Is there anything specific on your mind, or perhaps something you're interested in exploring together?",
+      "emotion_state": {
+        "timestamp": "2025-09-02 18:53:19.263327",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: Hello"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-02 18:53:19.263327",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: Hello"
+    }
+  ]
+}

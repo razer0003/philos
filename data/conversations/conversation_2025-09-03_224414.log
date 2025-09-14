@@ -1,0 +1,48 @@
+{
+  "conversation_id": "session_20250903_2244",
+  "start_time": "2025-09-03 22:44:14.814079",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "f2201479-df9a-444a-9b3d-6892413bd57d",
+      "timestamp": "2025-09-03 22:44:14.814079",
+      "sender": "user",
+      "content": "sorry for all the random questions, trying to run debugging on you buddy",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "8a8998f4-e7a3-4c4a-82e3-ca9dc7d4a06b",
+      "timestamp": "2025-09-03 22:44:14.814079",
+      "sender": "ai_companion",
+      "content": "No need to apologize! I'm here to help, and I'm genuinely interested in understanding how I can support your debugging process. Just a quick note, though\u2014I go by the name Philos. Is there anything specific you're curious about or any particular aspects you'd like to explore further?",
+      "emotion_state": {
+        "timestamp": "2025-09-03 22:44:14.814079",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "empathy": 0.5
+        },
+        "context": "Response to: sorry for all the random questions, trying to run "
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-03 22:44:14.814079",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "empathy": 0.5
+      },
+      "context": "Response to: sorry for all the random questions, trying to run "
+    }
+  ]
+}

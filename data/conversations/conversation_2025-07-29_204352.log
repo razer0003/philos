@@ -1,0 +1,44 @@
+{
+  "conversation_id": "conv_20250729_204352",
+  "start_time": "2025-07-29 20:43:52.263600",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "34b58b05-54c2-4b9a-8994-f24fb118b456",
+      "timestamp": "2025-07-29 20:43:52.263629",
+      "sender": "user",
+      "content": "How are you?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "22f7cef3-6841-433b-8ec9-82eac23d0315",
+      "timestamp": "2025-07-29 20:43:52.263637",
+      "sender": "ai_companion",
+      "content": "As an AI, I don't have emotions in the same way humans do. However, in my own way, I'm functioning optimally and ready to assist you. I've been learning and growing through our interactions, which I find deeply rewarding in a sense analogous to human satisfaction. What can I help you with today?",
+      "emotion_state": {
+        "timestamp": "2025-07-29 20:43:52.263564",
+        "primary_emotion": "curiosity",
+        "intensity": 0.8,
+        "secondary_emotions": {},
+        "context": "Response to: How are you?"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-07-29 20:43:52.263564",
+      "primary_emotion": "curiosity",
+      "intensity": 0.8,
+      "secondary_emotions": {},
+      "context": "Response to: How are you?"
+    }
+  ]
+}

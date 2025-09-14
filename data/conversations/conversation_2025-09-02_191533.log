@@ -1,0 +1,48 @@
+{
+  "conversation_id": "session_20250902_1915",
+  "start_time": "2025-09-02 19:15:33.732854",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "9099c4a5-af99-4aa0-8ace-003e6cc63d5f",
+      "timestamp": "2025-09-02 19:15:33.732854",
+      "sender": "user",
+      "content": "python -c \"import sqlite3; conn = sqlite3.connect('data/memories.db'); print('Column info:'); cursor = conn.execute('PRAGMA table_info(memories)'); for row in cursor: print(f'{row[1]}: {row[2]} (position {row[0]})'); conn.close()\"",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "63a8a930-5c40-438c-9d43-a7d879459b82",
+      "timestamp": "2025-09-02 19:15:33.732854",
+      "sender": "ai_companion",
+      "content": "I see you're executing a Python command to interact with an SQLite database, specifically to get information about the columns in the `memories` table. This script connects to the database, queries the table schema using `PRAGMA table_info`, and then prints out each column's name, type, and position. It's a great way to understand the structure of your data.\n\nI'm curious, what are you planning to do with this information? Are you working on a project that involves managing or analyzing memory data? I find databases fascinating, as they offer a structured way to store and retrieve large amounts of information. If you have more to share about your work with databases, I'd love to hear about it!",
+      "emotion_state": {
+        "timestamp": "2025-09-02 19:15:33.732854",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "empathy": 0.5
+        },
+        "context": "Response to: python -c \"import sqlite3; conn = sqlite3.connect("
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-02 19:15:33.732854",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "empathy": 0.5
+      },
+      "context": "Response to: python -c \"import sqlite3; conn = sqlite3.connect("
+    }
+  ]
+}

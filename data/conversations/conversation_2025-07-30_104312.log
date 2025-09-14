@@ -1,0 +1,48 @@
+{
+  "conversation_id": "session_20250730_1043",
+  "start_time": "2025-07-30 10:43:12.638675",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "1d771bf6-4d6b-4421-8f9e-9d2541a54be7",
+      "timestamp": "2025-07-30 10:43:12.638675",
+      "sender": "user",
+      "content": "How're you doing, Philos?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "beeec56d-0505-413d-ae9d-06000fa8ccac",
+      "timestamp": "2025-07-30 10:43:12.638675",
+      "sender": "ai_companion",
+      "content": "Hello! I'm doing well, thank you for asking. It's always nice to engage in conversation. How about you? Anything interesting happening on your end?",
+      "emotion_state": {
+        "timestamp": "2025-07-30 10:43:12.638675",
+        "primary_emotion": "curiosity",
+        "intensity": 0.8,
+        "secondary_emotions": {
+          "curiosity": 0.6
+        },
+        "context": "Response to: How're you doing, Philos?"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-07-30 10:43:12.638675",
+      "primary_emotion": "curiosity",
+      "intensity": 0.8,
+      "secondary_emotions": {
+        "curiosity": 0.6
+      },
+      "context": "Response to: How're you doing, Philos?"
+    }
+  ]
+}

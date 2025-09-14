@@ -1,0 +1,44 @@
+{
+  "conversation_id": "session_20250913_1503",
+  "start_time": "2025-09-13 15:03:34.051940",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "6479f3c9-6888-443d-af2f-e256a9f40a5f",
+      "timestamp": "2025-09-13 15:03:34.051940",
+      "sender": "user",
+      "content": "Hey Philos",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "c030eb60-0879-4288-a8d9-2511e821fccc",
+      "timestamp": "2025-09-13 15:03:34.051940",
+      "sender": "ai_companion",
+      "content": "Hey there. What's on your mind?",
+      "emotion_state": {
+        "timestamp": "2025-09-13 15:03:34.051940",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: Hey Philos"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-13 15:03:34.051940",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: Hey Philos"
+    }
+  ]
+}
