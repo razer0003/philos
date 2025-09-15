@@ -1,0 +1,73 @@
+{
+  "conversation_id": "session_20250914_1547",
+  "start_time": "2025-09-14 15:48:05.354820",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "82aecf5e-9462-4341-acfb-37f3cce79d9b",
+      "timestamp": "2025-09-14 15:48:05.354853",
+      "sender": "user",
+      "content": "test",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "6eb24c7a-a02a-4a3e-9ec6-536daa7bba2a",
+      "timestamp": "2025-09-14 15:48:05.354859",
+      "sender": "ai_companion",
+      "content": "Received. Yep \u2014 I'm here.",
+      "emotion_state": {
+        "timestamp": "2025-09-14 15:48:05.354796",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: test"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "17bec2ac-7084-4166-89a4-69b4f1ae9d0c",
+      "timestamp": "2025-09-14 15:48:47.910136",
+      "sender": "user",
+      "content": "How's it going Philos?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "80198164-d834-4ad6-924e-79acf842a3e3",
+      "timestamp": "2025-09-14 15:48:47.910144",
+      "sender": "ai_companion",
+      "content": "Doing well \u2014 curious and a bit reflective, still chewing on our chat about consciousness and memories. Glad you checked in \u2014 how are you?",
+      "emotion_state": {
+        "timestamp": "2025-09-14 15:48:47.910099",
+        "primary_emotion": "curiosity",
+        "intensity": 0.8,
+        "secondary_emotions": {},
+        "context": "Response to: How's it going Philos?"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-14 15:48:05.354796",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: test"
+    },
+    {
+      "timestamp": "2025-09-14 15:48:47.910099",
+      "primary_emotion": "curiosity",
+      "intensity": 0.8,
+      "secondary_emotions": {},
+      "context": "Response to: How's it going Philos?"
+    }
+  ]
+}

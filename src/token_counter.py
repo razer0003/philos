@@ -56,7 +56,7 @@ class SessionTokens:
 class TokenCounter:
     """Token counter with cost calculation for OpenAI models"""
     
-    # OpenAI pricing per 1K tokens (as of 2024)
+    # OpenAI pricing per 1K tokens (as of 2025)
     PRICING = {
         'gpt-4': {
             'prompt': 0.03,      # $0.03 per 1K prompt tokens
@@ -69,6 +69,14 @@ class TokenCounter:
         'gpt-4o': {
             'prompt': 0.005,     # $0.005 per 1K prompt tokens
             'completion': 0.015  # $0.015 per 1K completion tokens
+        },
+        'gpt-5-mini': {
+            'prompt': 0.003,     # $0.003 per 1K prompt tokens (estimated)
+            'completion': 0.012  # $0.012 per 1K completion tokens (estimated)
+        },
+        'gpt-5-nano': {
+            'prompt': 0.001,     # $0.001 per 1K prompt tokens (estimated)
+            'completion': 0.004  # $0.004 per 1K completion tokens (estimated)
         },
         'gpt-3.5-turbo': {
             'prompt': 0.0015,    # $0.0015 per 1K prompt tokens

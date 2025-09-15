@@ -1,0 +1,73 @@
+{
+  "conversation_id": "session_20250914_1648",
+  "start_time": "2025-09-14 16:49:04.075955",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "aaf63f13-36d6-45d2-a5bc-15df9ff4b713",
+      "timestamp": "2025-09-14 16:49:04.075982",
+      "sender": "user",
+      "content": "search up the wikipedia page for charles darwin and read me the first line",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "27becc25-0dc4-452d-93d2-d83264aa9ff0",
+      "timestamp": "2025-09-14 16:49:04.075989",
+      "sender": "ai_companion",
+      "content": "You asked me to read the first line, so I searched Wikipedia for \"Charles Darwin\" to find the official page and pull the lead sentence directly.\n\nI found the Wikipedia entry for Charles Darwin. The first line reads:\n\nCharles Robert Darwin (DAR-win; 12 February 1809 \u2013 19 April 1882) was an English naturalist, geologist, and biologist, widely known for his contributions to evolutionary biology.\n\n(There was also a separate Wikipedia page for Charles Galton Darwin in the results, but the line above is from the main Charles Darwin article.)  \n\nWant me to read the rest of the opening paragraph or give a short summary of his main ideas?",
+      "emotion_state": {
+        "timestamp": "2025-09-14 16:49:04.075928",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: search up the wikipedia page for charles darwin an"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "727d6687-9e48-4064-8736-86535339fdeb",
+      "timestamp": "2025-09-14 16:49:34.944752",
+      "sender": "user",
+      "content": "now read me the next line",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "e5514b99-9d89-4e9a-aa3e-870d61fa862e",
+      "timestamp": "2025-09-14 16:49:34.944759",
+      "sender": "ai_companion",
+      "content": "The next sentence reads: \"He established that all species of life have descended over time from common ancestors and proposed the scientific theory that this branching pattern of evolution resulted from a process that he called natural selection.\"",
+      "emotion_state": {
+        "timestamp": "2025-09-14 16:49:34.944719",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: now read me the next line"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-14 16:49:04.075928",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: search up the wikipedia page for charles darwin an"
+    },
+    {
+      "timestamp": "2025-09-14 16:49:34.944719",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: now read me the next line"
+    }
+  ]
+}

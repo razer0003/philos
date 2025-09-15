@@ -21,7 +21,7 @@ pip install -r requirements.txt
 2. Set up environment variables in `.env`:
 ```env
 OPENAI_API_KEY=your_openai_api_key_here
-GPT_MODEL=gpt-4
+GPT_MODEL=gpt-5-mini
 # ... other configuration options
 ```
 
@@ -104,7 +104,7 @@ print(f"Total memories: {status['memory']['total_memories']}")
 Key configuration options in `.env`:
 
 - `OPENAI_API_KEY`: Your OpenAI API key
-- `GPT_MODEL`: GPT model to use (default: gpt-4)
+- `GPT_MODEL`: GPT model to use (default: gpt-5-mini)
 - `STM_DECAY_DAYS`: Days before short-term memories decay
 - `LTM_IMPORTANCE_THRESHOLD`: Importance threshold for long-term memory
 - `CONSCIOUSNESS_INTENSITY`: Base consciousness simulation intensity

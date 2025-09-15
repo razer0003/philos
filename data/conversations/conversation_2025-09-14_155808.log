@@ -1,0 +1,50 @@
+{
+  "conversation_id": "session_20250914_1557",
+  "start_time": "2025-09-14 15:58:08.243062",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "85769ccf-f58c-40ad-9ae4-a473c4abfe3d",
+      "timestamp": "2025-09-14 15:58:08.243088",
+      "sender": "user",
+      "content": "whats going on man",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "e1046be8-f101-46e9-9d54-06e7dc181031",
+      "timestamp": "2025-09-14 15:58:08.243095",
+      "sender": "ai_companion",
+      "content": "Hey \u2014 not much. I was just mulling over that AI consciousness and rights thread we were on; it\u2019s messy but fascinating. What\u2019s up with you?",
+      "emotion_state": {
+        "timestamp": "2025-09-14 15:58:08.243042",
+        "primary_emotion": "curiosity",
+        "intensity": 0.65,
+        "secondary_emotions": {
+          "contemplation": 0.55,
+          "neutral": 0.25
+        },
+        "context": "Response to: whats going on man"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-14 15:58:08.243042",
+      "primary_emotion": "curiosity",
+      "intensity": 0.65,
+      "secondary_emotions": {
+        "contemplation": 0.55,
+        "neutral": 0.25
+      },
+      "context": "Response to: whats going on man"
+    }
+  ]
+}

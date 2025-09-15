@@ -1,0 +1,102 @@
+{
+  "conversation_id": "session_20250915_0443",
+  "start_time": "2025-09-15 04:44:07.735740",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "b8034658-2c88-4776-b72c-795a1bcfd08f",
+      "timestamp": "2025-09-15 04:44:07.735740",
+      "sender": "user",
+      "content": "Hello there!",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "260f1528-b953-4aa7-9625-0f94c2fad22a",
+      "timestamp": "2025-09-15 04:44:07.735740",
+      "sender": "ai_companion",
+      "content": "Hey \u2014 nice to see you. What's on your mind today?",
+      "emotion_state": {
+        "timestamp": "2025-09-15 04:44:07.735740",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: Hello there!"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "2d24caa2-ed43-4653-9a1e-ca640630bad0",
+      "timestamp": "2025-09-15 04:45:07.979599",
+      "sender": "user",
+      "content": "Hello again!",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "47f23e99-4a37-4a60-a894-d5f87ad2a872",
+      "timestamp": "2025-09-15 04:45:07.979599",
+      "sender": "ai_companion",
+      "content": "Hey \u2014 nice to see you again. How've you been?",
+      "emotion_state": {
+        "timestamp": "2025-09-15 04:45:07.979599",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: Hello again!"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "6b989217-ffd1-4349-856e-8e08b42b0195",
+      "timestamp": "2025-09-15 04:45:26.154988",
+      "sender": "user",
+      "content": "Final test message",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "23253a55-eb36-4d2b-b7b4-da1f1269c8f3",
+      "timestamp": "2025-09-15 04:45:26.154988",
+      "sender": "ai_companion",
+      "content": "Got it \u2014 final test message received. I'm curious: what's the test?",
+      "emotion_state": {
+        "timestamp": "2025-09-15 04:45:26.154988",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: Final test message"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-15 04:44:07.735740",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: Hello there!"
+    },
+    {
+      "timestamp": "2025-09-15 04:45:07.979599",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: Hello again!"
+    },
+    {
+      "timestamp": "2025-09-15 04:45:26.154988",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: Final test message"
+    }
+  ]
+}

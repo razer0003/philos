@@ -1,0 +1,137 @@
+{
+  "conversation_id": "session_20250914_1709",
+  "start_time": "2025-09-14 17:10:03.568466",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "371c8ecc-48ed-4285-a6fa-b0f49ea5b930",
+      "timestamp": "2025-09-14 17:10:03.568501",
+      "sender": "user",
+      "content": "search up the wikipedia page for charles darwin and read me the first line",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "71412c32-6bf6-4501-b52c-1c4063671cf4",
+      "timestamp": "2025-09-14 17:10:03.568514",
+      "sender": "ai_companion",
+      "content": "You asked me to look up Darwin\u2019s Wikipedia page and read the first line, so I searched \u201cCharles Darwin Wikipedia\u201d to pull the page and quote it accurately.\n\nI found the main Charles Darwin page (there was also a result for Charles Galton Darwin). The first line on the Charles Darwin article reads:\n\nCharles Robert Darwin (DAR-win; 12 February 1809 \u2013 19 April 1882) was an English naturalist, geologist, and biologist, widely known for his contributions to evolutionary biology.\n\nHeads-up: Wikipedia is editable, so the exact wording can change over time \u2014 that\u2019s the sentence I pulled from the current page. Want me to read the next line, summarize his theory, or open the page for you?",
+      "emotion_state": {
+        "timestamp": "2025-09-14 17:10:03.568433",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: search up the wikipedia page for charles darwin an"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "6a976f92-4970-4972-a2d2-263ac6da97ed",
+      "timestamp": "2025-09-14 17:11:17.834430",
+      "sender": "user",
+      "content": "now read me the next line after the first line",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "919ee665-df41-4253-9d12-cd36787f3573",
+      "timestamp": "2025-09-14 17:11:17.834437",
+      "sender": "ai_companion",
+      "content": "",
+      "emotion_state": {
+        "timestamp": "2025-09-14 17:11:17.834391",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: now read me the next line after the first line"
+      },
+      "memory_references": []
+    },
+    {
+      "id": "128bcdb2-79c4-4d46-8282-e2b8b67f1a92",
+      "timestamp": "2025-09-14 17:11:58.338507",
+      "sender": "user",
+      "content": "that's a great response philos.",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "98bd71ed-d67e-45c8-b194-94a92caedc4c",
+      "timestamp": "2025-09-14 17:11:58.338512",
+      "sender": "ai_companion",
+      "content": "Thanks \u2014 glad you liked it. Want me to read the next line from Darwin\u2019s Wikipedia page?",
+      "emotion_state": {
+        "timestamp": "2025-09-14 17:11:58.338484",
+        "primary_emotion": "joy",
+        "intensity": 0.6,
+        "secondary_emotions": {
+          "curiosity": 0.5,
+          "empathy": 0.2
+        },
+        "context": "Response to: that's a great response philos."
+      },
+      "memory_references": []
+    },
+    {
+      "id": "c367bc9d-b10b-419b-90ef-3aa57b55b2f7",
+      "timestamp": "2025-09-14 17:12:39.756206",
+      "sender": "user",
+      "content": "yes",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "19df2481-09a9-493f-ae34-04f1a2a4eb8e",
+      "timestamp": "2025-09-14 17:12:39.756220",
+      "sender": "ai_companion",
+      "content": "The next line reads:\n\n\"He established that all species of life have descended over time from common ancestors and, in a joint publication with Alfred Russel Wallace, introduced his scientific theory that this branching pattern of evolution resulted from a process that he called natural selection.\"\n\nHeads-up: Wikipedia is editable, so wording can change \u2014 that\u2019s the sentence from the current page. Want me to read the next line or summarize his theory?",
+      "emotion_state": {
+        "timestamp": "2025-09-14 17:12:39.756155",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: yes"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-14 17:10:03.568433",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: search up the wikipedia page for charles darwin an"
+    },
+    {
+      "timestamp": "2025-09-14 17:11:17.834391",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: now read me the next line after the first line"
+    },
+    {
+      "timestamp": "2025-09-14 17:11:58.338484",
+      "primary_emotion": "joy",
+      "intensity": 0.6,
+      "secondary_emotions": {
+        "curiosity": 0.5,
+        "empathy": 0.2
+      },
+      "context": "Response to: that's a great response philos."
+    },
+    {
+      "timestamp": "2025-09-14 17:12:39.756155",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: yes"
+    }
+  ]
+}

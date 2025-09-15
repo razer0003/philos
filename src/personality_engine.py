@@ -9,6 +9,7 @@ from .models import PersonalityTrait, AIPersonality, ConsciousnessState, MemoryT
 from .database import DatabaseManager
 from .memory_manager import MemoryManager
 from .neural_monitor import get_neural_monitor, NeuralActivityTracker
+from .model_selector import get_task_config
 
 class PersonalityEngine:
     def __init__(self, db_manager: DatabaseManager, memory_manager: MemoryManager):

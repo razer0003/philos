@@ -28,7 +28,7 @@ class AICompanion:
         # Initialize configuration
         self.config = {
             'openai_api_key': os.getenv('OPENAI_API_KEY'),
-            'gpt_model': os.getenv('GPT_MODEL', 'gpt-4'),
+            'gpt_model': os.getenv('GPT_MODEL', 'gpt-5-mini'),
             'db_path': os.getenv('DB_PATH', './data/ai_companion.db'),
             'conversations_path': os.getenv('CONVERSATIONS_PATH', './data/conversations'),
             'memory_path': os.getenv('MEMORY_PATH', './data/memory'),
@@ -102,6 +102,10 @@ class AICompanion:
             importance=0.8,
             context="Meta-cognitive reflection on AI nature"
         )
+    
+    def set_gui_reference(self, gui):
+        """Set the GUI reference for the consciousness engine to check settings"""
+        self.consciousness_engine.gui = gui
     
     def _update_neural_dashboard(self, computation_type: str, data: Dict[str, Any]):
         """Update the shared neural data store for dashboard display"""

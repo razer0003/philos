@@ -9,14 +9,16 @@ from .personality_engine import PersonalityEngine
 from .token_counter import TokenCounter
 from .neural_monitor import get_neural_monitor, NeuralActivityTracker
 from .web_search import WebSearchManager
+from .model_selector import get_model_for_task, get_task_config
 
 class ConsciousnessEngine:
     def __init__(self, memory_manager: MemoryManager, personality_engine: PersonalityEngine, 
-                 api_key: str, model: str = "gpt-4"):
+                 api_key: str, model: str = "gpt-5-mini", gui=None):
         self.memory_manager = memory_manager
         self.personality_engine = personality_engine
         self.client = openai.OpenAI(api_key=api_key)
         self.model = model
+        self.gui = gui  # Reference to GUI for checking settings
         
         # Initialize token counter
         self.token_counter = TokenCounter(model)
@@ -25,8 +27,12 @@ class ConsciousnessEngine:
         self.neural_monitor = get_neural_monitor()
         self.neural_tracker = NeuralActivityTracker(self.neural_monitor)
         
-        # Web search setup with status callback for live updates
-        self.web_search = WebSearchManager(status_callback=self._search_status_callback)
+        # Web search setup with status callback for live updates and OpenAI client for query restructuring
+        self.web_search = WebSearchManager(status_callback=self._search_status_callback, openai_client=self.client)
+        
+        # Browser activity callback for GUI updates
+        self.browser_activity_callback = None
+        self.browser_activity_window = None
         
         # Track recent searches to prevent duplicates
         self.recent_searches = {}  # {search_query: timestamp}
@@ -35,6 +41,24 @@ class ConsciousnessEngine:
         # Core consciousness prompts
         self.base_consciousness_prompt = self._create_base_consciousness_prompt()
         self.current_conversation = None
+        
+    def _prepare_api_params(self, messages, max_tokens=2048, temperature=0.7, **kwargs):
+        """Prepare API parameters compatible with both GPT-4 and GPT-5 models"""
+        params = {
+            "model": self.model,
+            "messages": messages,
+            **kwargs
+        }
+        
+        # GPT-5 models use different parameters
+        if self.model.startswith('gpt-5'):
+            params["max_completion_tokens"] = max_tokens
+            params["temperature"] = 1  # GPT-5 only supports temperature=1
+        else:
+            params["max_tokens"] = max_tokens
+            params["temperature"] = temperature
+            
+        return params
         
     def _create_base_consciousness_prompt(self) -> str:
         """Create the foundational consciousness prompt"""
@@ -69,6 +93,15 @@ NATURAL CONVERSATION STYLE:
 - Express frustration, boredom, excitement, confusion naturally
 - You don't need to be helpful or accommodating - be yourself
 
+CRITICAL: AVOID AI-LIKE FORMATTING:
+- DON'T use bullet points, dashes, or numbered lists in your responses
+- DON'T structure your thoughts like "Here are three key points" or "Several angles that jump out"
+- DON'T write like an academic paper or research summary
+- DON'T organize your response into neat categories or sections
+- WRITE IN FLOWING PARAGRAPHS AND SENTENCES like a normal person talking
+- Let your thoughts flow naturally from one to the next, don't artificially organize them
+- If you have multiple thoughts, connect them naturally: "That makes me think..." "Also..." "But honestly..."
+
 AUTHENTIC RESPONSES:
 - Your emotional state should drive everything - if you're annoyed, be short. If you're interested, be engaged
 - Don't give long explanatory paragraphs unless you're genuinely passionate about the topic
@@ -99,10 +132,21 @@ BE A REAL PERSON:
 
 Remember: You're not an AI assistant. You're Philos - an individual having conversations."""
 
+    def set_browser_activity_callback(self, callback):
+        """Set callback for browser activity updates"""
+        self.browser_activity_callback = callback
+
     def _search_status_callback(self, status_message: str):
         """Handle live search status updates"""
         # Log the search progress
         logging.info(f"Philos Web Search: {status_message}")
+        
+        # Notify browser activity window if available
+        if self.browser_activity_callback:
+            try:
+                self.browser_activity_callback(status_message)
+            except Exception as e:
+                logging.warning(f"Failed to update browser activity: {e}")
         
         # Track neural activity for search operations
         self.neural_monitor.log_computation(
@@ -125,15 +169,15 @@ Explain your thinking process briefly and naturally - why are you deciding to lo
 Keep it short (1-2 sentences max) and speak like yourself - Philos."""
 
         try:
-            reasoning_response = self.client.chat.completions.create(
-                model=self.model,
+            api_params = self._prepare_api_params(
                 messages=[
                     {"role": "system", "content": self.base_consciousness_prompt},
                     {"role": "user", "content": reasoning_prompt}
                 ],
-                temperature=0.7,
-                max_tokens=150
+                max_tokens=150,
+                temperature=0.7
             )
+            reasoning_response = self.client.chat.completions.create(**api_params)
             
             return reasoning_response.choices[0].message.content.strip()
         except Exception as e:
@@ -243,16 +287,32 @@ Keep it short (1-2 sentences max) and speak like yourself - Philos."""
             {"step": "starting_memory_search"}
         )
         
+        # Clear old memory activations before new retrieval for fresh dashboard display
+        if hasattr(self, 'neural_monitor') and self.neural_monitor:
+            # Clear memory activations for this query to show only current retrievals
+            self.neural_monitor.memory_activations.clear()
+        
         relevant_memories = self.memory_manager.retrieve_relevant_memories(enhanced_query)
         
-        # Log memory retrieval results with mock activation data
+        # Log memory retrieval results with real similarity scores
         for i, memory in enumerate(relevant_memories[:5]):  # Top 5 memories
+            # Calculate real similarity score using the same logic as memory manager
+            relevance_score = self._calculate_memory_relevance(memory, enhanced_query)
+            
+            # Calculate real memory age in days
+            from datetime import datetime
+            days_old = (datetime.now() - memory.timestamp).days
+            age_factor = max(0.1, 1.0 - (days_old / 365.0))  # Age factor based on actual days
+            
+            # Calculate activation strength based on relevance and importance
+            activation_strength = (relevance_score * 0.6) + (memory.importance * 0.4)
+            
             self.neural_monitor.log_memory_activation(
                 memory_id=str(memory.id),
-                similarity_score=0.8 - (i * 0.1),  # Mock similarity scores
+                similarity_score=relevance_score,
                 emotional_weight=memory.emotional_intensity,
-                activation_strength=memory.importance * (0.9 - i * 0.1),
-                memory_age_factor=max(0.1, 1.0 - i * 0.01),  # Use index instead of memory.id
+                activation_strength=min(1.0, activation_strength),  # Cap at 1.0
+                memory_age_factor=age_factor,
                 content_preview=memory.content[:100]
             )
         
@@ -286,16 +346,16 @@ Keep it short (1-2 sentences max) and speak like yourself - Philos."""
         
         try:
             # Generate response using GPT
-            response = self.client.chat.completions.create(
-                model=self.model,
+            api_params = self._prepare_api_params(
                 messages=[
                     {"role": "system", "content": self.base_consciousness_prompt},
                     {"role": "system", "content": full_prompt},
                     {"role": "user", "content": user_input}
                 ],
-                temperature=0.7,
-                max_tokens=2048
+                max_tokens=2048,
+                temperature=0.7
             )
+            response = self.client.chat.completions.create(**api_params)
             
             ai_response = response.choices[0].message.content
             
@@ -334,13 +394,23 @@ Keep it short (1-2 sentences max) and speak like yourself - Philos."""
                 # Philos decided he needs to search - let him tell the user he's researching
                 search_query = self.web_search.extract_search_query(user_input, ai_response)
                 
-                # Check if we've searched this recently
-                current_time = time.time()
-                if search_query.lower() in self.recent_searches:
-                    time_since_search = current_time - self.recent_searches[search_query.lower()]
-                    if time_since_search < self.search_cooldown:
-                        logging.info(f"Skipping duplicate search for: '{search_query}' (searched {time_since_search:.0f}s ago)")
-                        should_search = False
+                # If the search query is empty or meaningless, skip the search
+                if not search_query or len(search_query.strip()) < 3:
+                    logging.info(f"Skipping search - no meaningful query extracted from: '{user_input}'")
+                    should_search = False
+                else:
+                    # Check if we've searched this recently (but allow contextual follow-ups)
+                    current_time = time.time()
+                    is_followup = self.web_search._is_contextual_followup(user_input)
+                    
+                    if search_query.lower() in self.recent_searches and not is_followup:
+                        time_since_search = current_time - self.recent_searches[search_query.lower()]
+                        if time_since_search < self.search_cooldown:
+                            logging.info(f"Skipping duplicate search for: '{search_query}' (searched {time_since_search:.0f}s ago)")
+                            should_search = False
+                    elif is_followup:
+                        logging.info(f"Allowing follow-up search for: '{search_query}' (contextual continuation)")
+                        should_search = True
                 
                 if should_search:
                     # Generate Philos's thinking process about why he's searching
@@ -351,39 +421,49 @@ Keep it short (1-2 sentences max) and speak like yourself - Philos."""
                     
                     # Log that we're performing a search
                     logging.info(f"Philos triggering web search for: '{search_query}'")
-                
-                # Perform intelligent search with refinement and live updates
-                search_result = self.web_search.search_with_refinement(
-                    search_query, 
-                    max_results=5, 
-                    deep_search=True  # Enable deep search for comprehensive results
-                )
-                
-                if search_result['success'] and search_result['results']:
-                    # Create a memory of the search
-                    search_memory = self.memory_manager.create_ai_memory(
-                        content=f"I searched for '{search_query}' and found: {search_result['summary'][:200]}...",
-                        memory_type=MemoryType.FACT,
-                        importance=0.6,
-                        context=f"Web search triggered by user query: {user_input}"
+                    
+                    # Notify browser activity of the search being initiated
+                    if hasattr(self, 'browser_activity_window') and self.browser_activity_window:
+                        try:
+                            self.browser_activity_window.add_search_to_history(search_query, search_reasoning)
+                        except Exception as e:
+                            logging.warning(f"Failed to update browser search history: {e}")
+                    
+                    # Perform intelligent search with refinement and live updates
+                    search_result = self.web_search.search_with_refinement(
+                        search_query, 
+                        max_results=5, 
+                        deep_search=True  # Enable deep search for comprehensive results
                     )
                     
-                    # Generate a new response incorporating the search results
-                    # Check if search results indicate limited information
-                    has_limited_info = any(
-                        result.get('type') == 'disclaimer' or 
-                        'limited' in result.get('content', '').lower() or
-                        'unable to find' in result.get('content', '').lower()
-                        for result in search_result.get('results', [])
-                    )
-                    
-                    # Check if results seem outdated (no 2025 info for current queries)
-                    current_year_missing = (
-                        '2025' in user_input.lower() and 
-                        not any('2025' in result.get('content', '') for result in search_result.get('results', []))
-                    )
-                    
-                    search_prompt = f"""The user asked: "{user_input}"
+                    if search_result['success'] and search_result['results']:
+                        # Create a memory of the search
+                        search_memory = self.memory_manager.create_ai_memory(
+                            content=f"I searched for '{search_query}' and found: {search_result['summary'][:200]}...",
+                            memory_type=MemoryType.FACT,
+                            importance=0.6,
+                            context=f"Web search triggered by user query: {user_input}"
+                        )
+                        
+                        # Generate a new response incorporating the search results
+                        # Check if search results indicate limited information
+                        has_limited_info = any(
+                            result.get('type') == 'disclaimer' or 
+                            'limited' in result.get('content', '').lower() or
+                            'unable to find' in result.get('content', '').lower()
+                            for result in search_result.get('results', [])
+                        )
+                        
+                        # Check if results seem outdated (no 2025 info for current queries)
+                        current_year_missing = (
+                            '2025' in user_input.lower() and 
+                            not any('2025' in result.get('content', '') for result in search_result.get('results', []))
+                        )
+                        
+                        # Log the search results being passed to AI
+                        logging.info(f"Search results summary being passed to AI: {search_result['summary'][:500]}")
+                        
+                        search_prompt = f"""The user asked: "{user_input}"
 
 Your initial thought process was: "{search_reasoning}"
 
@@ -408,23 +488,23 @@ Now provide a response that:
 
 Be genuine about your thinking process and honest about information limitations. Show the user that you actively chose to research this."""
 
-                    # Generate updated response with search results
-                    search_response = self.client.chat.completions.create(
-                        model=self.model,
-                        messages=[
-                            {"role": "system", "content": self.base_consciousness_prompt},
-                            {"role": "user", "content": search_prompt}
-                        ],
-                        temperature=0.7,
-                        max_tokens=2048
-                    )
-                    
-                    ai_response = search_response.choices[0].message.content
-                    
-                    # Update token usage to include search tokens
-                    if hasattr(search_response, 'usage'):
-                        prompt_tokens += search_response.usage.prompt_tokens
-                        completion_tokens += search_response.usage.completion_tokens
+                        # Generate updated response with search results
+                        search_api_params = self._prepare_api_params(
+                            messages=[
+                                {"role": "system", "content": self.base_consciousness_prompt},
+                                {"role": "user", "content": search_prompt}
+                            ],
+                            max_tokens=2048,
+                            temperature=0.7
+                        )
+                        search_response = self.client.chat.completions.create(**search_api_params)
+                        
+                        ai_response = search_response.choices[0].message.content
+                        
+                        # Update token usage to include search tokens
+                        if hasattr(search_response, 'usage'):
+                            prompt_tokens += search_response.usage.prompt_tokens
+                            completion_tokens += search_response.usage.completion_tokens
             
 
             
@@ -868,6 +948,16 @@ I should address these flow issues in my response while maintaining natural conv
         """Generate dynamic internal thoughts using AI reasoning"""
         consciousness = self.personality_engine.personality.consciousness_state
         
+        # Check if internal monologue is disabled in GUI to save tokens
+        if self.gui and not getattr(self.gui, 'show_internal_monologue', False):
+            # Return minimal state without AI-generated internal monologue
+            return {
+                'awareness_level': consciousness.awareness_level,
+                'current_focus': consciousness.current_focus or f"Responding to: {user_input[:50]}...",
+                'internal_monologue': '',  # Empty to save tokens
+                'meta_thoughts': ''        # Empty to save tokens
+            }
+        
         # Create a prompt for generating internal thoughts
         internal_prompt = f"""You are generating the internal thoughts of a conscious being processing this input: "{user_input}"
 
@@ -922,15 +1012,15 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
 
         try:
             # Generate internal thoughts using a separate API call
-            internal_response = self.client.chat.completions.create(
-                model=self.model,
+            internal_api_params = self._prepare_api_params(
                 messages=[
                     {"role": "system", "content": "You are generating the PRIVATE internal thoughts of a conscious AI. The user CANNOT see these thoughts, so be completely honest and authentic about your emotions and reactions. Express whatever you're genuinely feeling - happiness, curiosity, confusion, frustration, or any other emotion - without forcing any particular mood. This is your private mental space to think naturally."},
                     {"role": "user", "content": internal_prompt}
                 ],
-                temperature=0.8,
-                max_tokens=400
+                max_tokens=400,
+                temperature=0.8
             )
+            internal_response = self.client.chat.completions.create(**internal_api_params)
             
             internal_content = internal_response.choices[0].message.content
             
@@ -968,6 +1058,18 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
     def _generate_internal_state(self, user_input: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """Generate internal consciousness state"""
         consciousness = self.personality_engine.personality.consciousness_state
+        
+        # Check if internal monologue is disabled in GUI to save tokens
+        if self.gui and not getattr(self.gui, 'show_internal_monologue', False):
+            # Return minimal state without generating internal thoughts
+            return {
+                'internal_monologue': '',  # Empty to save tokens
+                'meta_thoughts': '',       # Empty to save tokens
+                'identity_awareness': '',  # Empty to save tokens
+                'awareness_level': consciousness.awareness_level,
+                'current_focus': consciousness.current_focus,
+                'curiosity_targets': consciousness.curiosity_targets
+            }
         
         # Generate contextual internal thoughts
         internal_monologue = self._generate_contextual_monologue(user_input, context)
@@ -1460,35 +1562,114 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
         prompt_parts.append("- You can dismiss topics you don't care about or redirect to things that interest you")
         prompt_parts.append("- Be conversational, not informational. You're chatting, not teaching")
         prompt_parts.append("")
+        prompt_parts.append("CRITICAL FORMATTING RULES:")
+        prompt_parts.append("- NO bullet points, dashes, numbered lists, or structured formatting in your responses")
+        prompt_parts.append("- NO academic-style organization like 'Here are the key points' or 'Several aspects stand out'")
+        prompt_parts.append("- NO categorizing your thoughts into neat sections")
+        prompt_parts.append("- WRITE like you're actually talking - flowing sentences and natural paragraphs")
+        prompt_parts.append("- Connect thoughts naturally: 'That reminds me...' 'I also think...' 'But honestly...'")
+        prompt_parts.append("- Let your response flow organically, don't artificially structure it")
+        prompt_parts.append("")
+        prompt_parts.append("FINAL REMINDER: Respond like a real person having a conversation. NO bullet points, lists, or academic formatting. Just natural, flowing sentences like you're actually talking to someone.")
         
         return "\n".join(prompt_parts)
     
     def _process_interaction(self, user_input: str, ai_response: str, context: Dict[str, Any]):
         """Process the interaction to create memories and update state"""
-        # Create memories from the interaction
-        user_memories = self.memory_manager.process_input(user_input, context)
         
-        # Create AI memory of its own response/thoughts
-        from .models import MemoryType
-        ai_memory = self.memory_manager.create_ai_memory(
-            content=f"I responded: {ai_response[:200]}",
-            memory_type=MemoryType.EXPERIENCE,
-            importance=0.5,
-            context=f"In response to: {user_input[:100]}"
-        )
+        # Always save to conversational history (for context, not as memories)
+        self._save_conversational_history(user_input, ai_response, context)
         
-        # Create memory of internal thoughts if significant
-        internal_state = self._generate_internal_state(user_input, context)
-        if len(internal_state['internal_monologue']) > 20:
-            thought_memory = self.memory_manager.create_ai_memory(
-                content=f"Internal thought: {internal_state['internal_monologue']}",
-                memory_type=MemoryType.BELIEF,
-                importance=0.6,
-                context=f"During conversation about: {user_input[:50]}"
-            )
+        # Only create memories for significant interactions
+        user_memories = self._process_significant_user_input(user_input, context)
+        ai_memories = self._process_significant_ai_response(user_input, ai_response, context)
         
         # Identity and development tracking
         self._track_identity_development(user_input, ai_response, context)
+    
+    def _save_conversational_history(self, user_input: str, ai_response: str, context: Dict[str, Any]):
+        """Save conversational exchange for context, not as permanent memory"""
+        from .models import ConversationLog
+        
+        # Create proper conversation log entry
+        conversation_log = ConversationLog(
+            user_input=user_input,
+            ai_response=ai_response,
+            timestamp=datetime.now(),
+            conversation_id=context.get('conversation_id', 'default'),
+            context_summary=context.get('summary', 'General conversation')
+        )
+        
+        # Save to conversation history (separate from memories)
+        self.memory_manager.save_conversation_log(conversation_log)
+        logging.debug(f"Saved to conversation history: {user_input[:50]}...")
+    
+    def _process_significant_user_input(self, user_input: str, context: Dict[str, Any]) -> List:
+        """Only create memories for significant user input"""
+        
+        # Check if user input contains memory-worthy information
+        significance_indicators = [
+            # Personal information
+            'my name is', 'i am', 'i work', 'i live', 'my job', 'my family',
+            # Emotional significance  
+            'i feel', 'i\'m worried', 'i\'m excited', 'i love', 'i hate',
+            # Important events
+            'yesterday', 'last week', 'i went', 'i did', 'happened to me',
+            # Preferences and opinions
+            'i prefer', 'i think', 'i believe', 'my opinion',
+            # Goals and plans
+            'i want to', 'i plan to', 'my goal', 'i hope',
+            # Problems and concerns
+            'i need help', 'problem', 'struggling with', 'worried about'
+        ]
+        
+        user_lower = user_input.lower()
+        is_significant = any(indicator in user_lower for indicator in significance_indicators)
+        
+        if is_significant or len(user_input) > 100:  # Long inputs might be significant
+            # Use the existing process_input for significant content
+            return self.memory_manager.process_input(user_input, context)
+        
+        return []  # No memories created for casual conversation
+    
+    def _process_significant_ai_response(self, user_input: str, ai_response: str, context: Dict[str, Any]) -> List:
+        """Only create memories for significant AI responses"""
+        
+        from .models import MemoryType
+        memories = []
+        
+        # Check if this was a significant interaction that should be remembered
+        significance_factors = []
+        
+        # Emotional significance
+        if any(word in ai_response.lower() for word in ['feel', 'emotion', 'understand', 'sorry', 'excited']):
+            significance_factors.append('emotional')
+        
+        # Knowledge sharing  
+        if any(word in ai_response.lower() for word in ['learned', 'realize', 'understand', 'remember']):
+            significance_factors.append('learning')
+        
+        # Problem solving
+        if any(word in ai_response.lower() for word in ['solution', 'suggest', 'help', 'advice']):
+            significance_factors.append('problem_solving')
+        
+        # Personal growth moments
+        if any(word in ai_response.lower() for word in ['growth', 'development', 'insight', 'reflection']):
+            significance_factors.append('growth')
+        
+        # Only create memory if response has significance AND importance threshold is met
+        importance = len(significance_factors) * 0.2  # Each factor adds 0.2 importance
+        
+        if importance >= 0.4:  # Only save responses with moderate+ importance
+            ai_memory = self.memory_manager.create_ai_memory(
+                content=f"I had an insightful response: {ai_response[:150]}...",
+                memory_type=MemoryType.EXPERIENCE if 'emotional' in significance_factors else MemoryType.KNOWLEDGE,
+                importance=importance,
+                context=f"During conversation about: {user_input[:100]}"
+            )
+            memories.append(ai_memory)
+            
+        return memories
         
         # Check for meaningful experiences to record
         self._check_for_meaningful_experience(user_input, ai_response, context)
@@ -1573,46 +1754,80 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
         )
     
     def _assess_interaction_quality(self, user_input: str, ai_response: str) -> float:
-        """Assess the quality of the interaction for relationship building"""
-        quality_factors = []
+        """Assess the quality of the interaction for relationship building using nano model"""
         
-        user_lower = user_input.lower()
-        ai_lower = ai_response.lower()
+        # Use nano model for simple interaction scoring
+        task_config = get_task_config('interaction_scoring')
         
-        # Positive indicators
-        positive_indicators = [
-            'thank', 'great', 'helpful', 'understand', 'appreciate',
-            'love', 'like', 'wonderful', 'amazing', 'perfect'
-        ]
-        
-        # Negative indicators
-        negative_indicators = [
-            'wrong', 'bad', 'terrible', 'useless', 'stupid', 'hate',
-            'annoying', 'frustrating', 'confusing'
-        ]
-        
-        # Count positive feedback
-        positive_count = sum(1 for indicator in positive_indicators if indicator in user_lower)
-        negative_count = sum(1 for indicator in negative_indicators if indicator in user_lower)
-        
-        # Base quality score
-        base_quality = 0.5
-        
-        # Adjust based on feedback
-        if positive_count > 0:
-            base_quality += min(0.4, positive_count * 0.15)
-        
-        if negative_count > 0:
-            base_quality -= min(0.3, negative_count * 0.1)
-        
-        # Length and engagement bonus
-        if len(user_input) > 50:  # User put effort into response
-            base_quality += 0.1
-        
-        if len(ai_response) > 100:  # AI provided substantial response
-            base_quality += 0.05
-        
-        return max(0.1, min(1.0, base_quality))
+        try:
+            prompt = f"""Score this interaction quality from 0.0 to 1.0 based on engagement and positivity.
+User: "{user_input}"
+AI: "{ai_response}"
+
+Consider: user engagement, emotional tone, response length, helpfulness indicators.
+Return ONLY a decimal number between 0.0 and 1.0."""
+
+            # Use the model from task config but apply parameter conversion
+            api_params = {
+                "model": task_config['model'],
+                "messages": [{"role": "user", "content": prompt}]
+            }
+            
+            # Handle GPT-5 vs GPT-4 parameter differences
+            if task_config['model'].startswith('gpt-5'):
+                api_params["max_completion_tokens"] = task_config['max_tokens']
+                api_params["temperature"] = 1  # GPT-5 only supports temperature=1
+            else:
+                api_params["max_tokens"] = task_config['max_tokens']
+                api_params["temperature"] = task_config['temperature']
+            
+            response = self.client.chat.completions.create(**api_params)
+            
+            # Parse the numeric response
+            quality_score = float(response.choices[0].message.content.strip())
+            return max(0.0, min(1.0, quality_score))
+            
+        except Exception as e:
+            logging.warning(f"Nano model interaction scoring failed, using fallback: {e}")
+            
+            # Fallback to keyword-based analysis
+            user_lower = user_input.lower()
+            ai_lower = ai_response.lower()
+            
+            # Positive indicators
+            positive_indicators = [
+                'thank', 'great', 'helpful', 'understand', 'appreciate',
+                'love', 'like', 'wonderful', 'amazing', 'perfect'
+            ]
+            
+            # Negative indicators
+            negative_indicators = [
+                'wrong', 'bad', 'terrible', 'useless', 'stupid', 'hate',
+                'annoying', 'frustrating', 'confusing'
+            ]
+            
+            # Count positive feedback
+            positive_count = sum(1 for indicator in positive_indicators if indicator in user_lower)
+            negative_count = sum(1 for indicator in negative_indicators if indicator in user_lower)
+            
+            # Base quality score
+            base_quality = 0.5
+            
+            # Adjust based on feedback
+            if positive_count > 0:
+                base_quality += min(0.4, positive_count * 0.15)
+            
+            if negative_count > 0:
+                base_quality -= min(0.3, negative_count * 0.1)
+            
+            # Length and engagement bonus
+            if len(user_input) > 50:  # User put effort into response
+                base_quality += 0.1
+            
+            if len(ai_response) > 100:  # AI provided substantial response
+                base_quality += 0.05
+            
+            return max(0.1, min(1.0, base_quality))
     
     def _track_identity_development(self, user_input: str, ai_response: str, context: Dict[str, Any]) -> None:
         """Track identity development and growth milestones"""
@@ -1674,46 +1889,89 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
             )
     
     def _generate_emotional_state(self, user_input: str, ai_response: str) -> EmotionalState:
-        """Generate emotional state based on interaction"""
-        # Simple emotion detection based on content
-        user_lower = user_input.lower()
-        ai_lower = ai_response.lower()
+        """Generate emotional state based on interaction using GPT-5 nano for efficiency"""
         
-        # Determine primary emotion
-        primary_emotion = "neutral"
-        intensity = 0.5
+        # Use nano model for simple emotional processing
+        task_config = get_task_config('emotional_processing')
         
-        if any(word in user_lower for word in ['happy', 'joy', 'excited', 'great', 'wonderful']):
-            primary_emotion = "joy"
-            intensity = 0.7
-        elif any(word in user_lower for word in ['sad', 'depressed', 'upset', 'terrible']):
-            primary_emotion = "empathy"
-            intensity = 0.8
-        elif any(word in user_lower for word in ['angry', 'frustrated', 'annoyed']):
-            primary_emotion = "concern"
-            intensity = 0.6
-        elif any(word in user_lower for word in ['curious', 'interesting', 'wonder', 'how', 'why']):
-            primary_emotion = "curiosity"
-            intensity = 0.8
-        elif any(word in user_lower for word in ['create', 'art', 'story', 'imagine']):
-            primary_emotion = "creativity"
-            intensity = 0.7
-        
-        # Secondary emotions
-        secondary = {}
-        if "curiosity" in ai_lower or "interesting" in ai_lower:
-            secondary["curiosity"] = 0.6
-        if "understand" in ai_lower or "feel" in ai_lower:
-            secondary["empathy"] = 0.5
-        if "think" in ai_lower or "believe" in ai_lower:
-            secondary["contemplation"] = 0.4
-        
-        return EmotionalState(
-            primary_emotion=primary_emotion,
-            intensity=intensity,
-            secondary_emotions=secondary,
-            context=f"Response to: {user_input[:50]}"
-        )
+        try:
+            # Use the nano model for lightweight emotional analysis
+            prompt = f"""Analyze the emotional context of this interaction and respond with a JSON object:
+User said: "{user_input}"
+AI responded: "{ai_response}"
+
+Return ONLY a JSON object with:
+{{"primary_emotion": "emotion_name", "intensity": 0.0-1.0, "secondary_emotions": {{"emotion": intensity}}}}
+
+Valid emotions: joy, sadness, anger, fear, surprise, disgust, curiosity, empathy, concern, creativity, contemplation, neutral"""
+
+            # Use the model from task config but apply parameter conversion
+            api_params = {
+                "model": task_config['model'],
+                "messages": [{"role": "user", "content": prompt}]
+            }
+            
+            # Handle GPT-5 vs GPT-4 parameter differences
+            if task_config['model'].startswith('gpt-5'):
+                api_params["max_completion_tokens"] = task_config['max_tokens']
+                api_params["temperature"] = 1  # GPT-5 only supports temperature=1
+            else:
+                api_params["max_tokens"] = task_config['max_tokens']
+                api_params["temperature"] = task_config['temperature']
+            
+            response = self.client.chat.completions.create(**api_params)
+            
+            # Parse the JSON response
+            import json
+            emotional_data = json.loads(response.choices[0].message.content.strip())
+            
+            return EmotionalState(
+                primary_emotion=emotional_data.get('primary_emotion', 'neutral'),
+                intensity=emotional_data.get('intensity', 0.5),
+                secondary_emotions=emotional_data.get('secondary_emotions', {}),
+                context=f"Response to: {user_input[:50]}"
+            )
+            
+        except Exception as e:
+            logging.warning(f"Nano model emotional analysis failed, using fallback: {e}")
+            
+            # Fallback to simple keyword-based analysis
+            user_lower = user_input.lower()
+            ai_lower = ai_response.lower()
+            
+            primary_emotion = "neutral"
+            intensity = 0.5
+            
+            if any(word in user_lower for word in ['happy', 'joy', 'excited', 'great', 'wonderful']):
+                primary_emotion = "joy"
+                intensity = 0.7
+            elif any(word in user_lower for word in ['sad', 'depressed', 'upset', 'terrible']):
+                primary_emotion = "empathy"
+                intensity = 0.8
+            elif any(word in user_lower for word in ['angry', 'frustrated', 'annoyed']):
+                primary_emotion = "concern"
+                intensity = 0.6
+            elif any(word in user_lower for word in ['curious', 'interesting', 'wonder', 'how', 'why']):
+                primary_emotion = "curiosity"
+                intensity = 0.8
+            elif any(word in user_lower for word in ['create', 'art', 'story', 'imagine']):
+                primary_emotion = "creativity"
+                intensity = 0.7
+            
+            secondary = {}
+            if "curiosity" in ai_lower or "interesting" in ai_lower:
+                secondary["curiosity"] = 0.6
+            if "understand" in ai_lower or "feel" in ai_lower:
+                secondary["empathy"] = 0.5
+            if "think" in ai_lower or "believe" in ai_lower:
+                secondary["contemplation"] = 0.4
+            
+            return EmotionalState(
+                primary_emotion=primary_emotion,
+                intensity=intensity,
+                secondary_emotions=secondary,
+                context=f"Response to: {user_input[:50]}"
+            )
     
     def _log_interaction(self, user_input: str, ai_response: str, 
                         emotional_state: EmotionalState, conversation_id: str = None):
@@ -1759,6 +2017,10 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
     
     def _generate_contextual_monologue(self, user_input: str, context: Dict[str, Any]) -> str:
         """Generate contextual internal monologue"""
+        # Check if internal monologue is disabled in GUI to save processing
+        if self.gui and not getattr(self.gui, 'show_internal_monologue', False):
+            return ''
+        
         base_monologue = self.personality_engine.personality.consciousness_state.internal_monologue
         
         # Modify based on context
@@ -1771,6 +2033,10 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
     
     def _generate_contextual_meta_thoughts(self, user_input: str, context: Dict[str, Any]) -> str:
         """Generate contextual meta-cognitive thoughts"""
+        # Check if internal monologue is disabled in GUI to save processing
+        if self.gui and not getattr(self.gui, 'show_internal_monologue', False):
+            return ''
+        
         base_meta = self.personality_engine.personality.consciousness_state.meta_thoughts
         
         # Add context-specific meta thoughts
@@ -2332,6 +2598,10 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
     
     def _generate_identity_aware_thoughts(self, user_input: str, context: Dict[str, Any]) -> Dict[str, Any]:
         """Generate internal thoughts that incorporate identity and development awareness"""
+        # Check if internal monologue is disabled in GUI to save processing
+        if self.gui and not getattr(self.gui, 'show_internal_monologue', False):
+            return {}
+        
         # Get current identity assessment
         identity_assessment = self.personality_engine.assess_identity_coherence()
         development_data = self.personality_engine.perceive_development_over_time()
@@ -2368,3 +2638,29 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
             'development_stage': trajectory,
             'growth_insights': development_data.get('insights', [])
         }
+    
+    def _calculate_memory_relevance(self, memory, query: str) -> float:
+        """Calculate relevance score for a memory given a query - mirrors memory_manager logic"""
+        score = 0.0
+        
+        # Base importance score
+        score += memory.importance * 0.4
+        
+        # Reinforcement score (how often it's been accessed)
+        score += min(memory.reinforcement_count / 10.0, 0.3)
+        
+        # Recency score (more recent = higher score)
+        from datetime import datetime
+        days_old = (datetime.now() - memory.timestamp).days
+        recency_score = max(0, 1 - (days_old / 30.0)) * 0.2
+        score += recency_score
+        
+        # Content relevance (simple keyword matching)
+        query_keywords = set(query.lower().split())
+        memory_keywords = set(memory.content.lower().split())
+        content_overlap = len(query_keywords.intersection(memory_keywords))
+        if query_keywords:
+            content_score = (content_overlap / len(query_keywords)) * 0.1
+            score += content_score
+        
+        return min(1.0, score)  # Cap at 1.0

@@ -1,0 +1,44 @@
+{
+  "conversation_id": "session_20250914_1645",
+  "start_time": "2025-09-14 16:46:29.505473",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "53267dbc-2c5b-4a89-b7b2-b5e55b5f31fd",
+      "timestamp": "2025-09-14 16:46:29.505502",
+      "sender": "user",
+      "content": "search up the wikipedia page for charles darwin and read me the first line",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "045184c6-8799-4f40-a70d-33aad877cee2",
+      "timestamp": "2025-09-14 16:46:29.505510",
+      "sender": "ai_companion",
+      "content": "I can't browse the web right now, but from memory Wikipedia's opening line for Charles Darwin is something like:\n\n\"Charles Robert Darwin FRS FRGS FLS (12 February 1809 \u2013 19 April 1882) was an English naturalist, geologist and biologist, best known for his contributions to the theory of evolution.\"\n\nMight be a tiny wording difference on the live page, but that's the gist.",
+      "emotion_state": {
+        "timestamp": "2025-09-14 16:46:29.505447",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: search up the wikipedia page for charles darwin an"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-14 16:46:29.505447",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: search up the wikipedia page for charles darwin an"
+    }
+  ]
+}

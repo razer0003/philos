@@ -1,0 +1,13 @@
+{
+  "conversation_id": "default",
+  "start_time": "2025-09-14 16:25:14.962314",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": []
+}

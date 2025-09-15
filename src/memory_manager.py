@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import List, Optional, Dict, Any, Tuple
 from .models import Memory, PersonalityTrait, ConversationLog, MemoryType, MemorySource
 from .database import DatabaseManager
+from .model_selector import get_task_config
 
 class MemoryManager:
     def __init__(self, db_manager: DatabaseManager, conversations_path: str):
@@ -352,15 +353,20 @@ class MemoryManager:
                     memory_created = True
                     break
         
-        # If no specific type detected, create a general experience memory
-        if not memory_created and not extracted:
-            extracted.append({
-                'type': MemoryType.EXPERIENCE,
-                'content': text,
-                'importance': 0.4,
-                'confidence': 0.6,
-                'tags': ['general', 'experience']
-            })
+        # Only create general experience memory for substantial input (not casual conversation)
+        if not memory_created and not extracted and len(text) > 20:
+            # Check if this might be significant despite not matching patterns
+            significance_words = ['problem', 'help', 'important', 'remember', 'tell you', 'question']
+            if any(word in text_lower for word in significance_words):
+                extracted.append({
+                    'type': MemoryType.EXPERIENCE,
+                    'content': text,
+                    'importance': 0.4,
+                    'confidence': 0.6,
+                    'tags': ['general', 'experience']
+                })
+        
+        # Don't create memories for short casual inputs like "test", "hello", "ok", etc.
         
         return extracted
     
@@ -488,3 +494,11 @@ class MemoryManager:
         except Exception as e:
             logging.error(f"Error loading conversation log: {e}")
             return None
+    
+    def delete_memory(self, memory_id: str) -> bool:
+        """Delete a specific memory by ID"""
+        return self.db.delete_memory(memory_id)
+    
+    def clear_all_memories(self) -> bool:
+        """Delete all memories from the database"""
+        return self.db.clear_all_memories()

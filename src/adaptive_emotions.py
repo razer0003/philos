@@ -11,6 +11,7 @@ from dataclasses import dataclass, asdict
 from collections import defaultdict, deque
 import logging
 from pathlib import Path
+from .model_selector import get_model_for_task
 
 @dataclass
 class EmotionalPattern:

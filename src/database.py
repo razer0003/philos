@@ -320,3 +320,34 @@ class DatabaseManager:
             stability=row[6],
             last_updated=self._safe_datetime_parse(row[7])
         )
+    
+    def delete_memory(self, memory_id: str) -> bool:
+        """Delete a specific memory by ID"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('DELETE FROM memories WHERE id = ?', (memory_id,))
+                
+                if cursor.rowcount > 0:
+                    logging.info(f"Deleted memory: {memory_id}")
+                    return True
+                else:
+                    logging.warning(f"Memory not found: {memory_id}")
+                    return False
+        except Exception as e:
+            logging.error(f"Error deleting memory {memory_id}: {e}")
+            return False
+    
+    def clear_all_memories(self) -> bool:
+        """Delete all memories from the database"""
+        try:
+            with sqlite3.connect(self.db_path) as conn:
+                cursor = conn.cursor()
+                cursor.execute('DELETE FROM memories')
+                
+                deleted_count = cursor.rowcount
+                logging.info(f"Cleared all memories: {deleted_count} deleted")
+                return True
+        except Exception as e:
+            logging.error(f"Error clearing all memories: {e}")
+            return False

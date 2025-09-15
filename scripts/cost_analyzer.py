@@ -9,11 +9,11 @@ from token_counter import TokenCounter
 def analyze_cost_breakdown():
     """Analyze where the high costs are coming from"""
     
-    # Initialize tokenizer for GPT-4o
-    tokenizer = tiktoken.encoding_for_model("gpt-4o")
-    counter = TokenCounter("gpt-4o")  # Changed to GPT-4o
+    # Initialize tokenizer for GPT-5 mini
+    tokenizer = tiktoken.encoding_for_model("gpt-5-mini")
+    counter = TokenCounter("gpt-5-mini")  # Changed to GPT-5 mini
     
-    print("🔍 AI COMPANION COST ANALYSIS (GPT-4o + REDUCED PROMPT)")
+    print("🔍 AI COMPANION COST ANALYSIS (GPT-5 MINI)")
     print("=" * 55)
     
     # Sample base consciousness prompt (NEW REDUCED version)
@@ -178,7 +178,7 @@ META_THOUGHTS: [Your awareness of your own thinking - how are you processing thi
     print("   3. Limit personality context to essential traits only")
     print("   4. Reduce memory context to top 3 most relevant")
     print("   5. Remove verbose conversation flow analysis for simple greetings")
-    print("   6. Consider using GPT-4o or GPT-4-turbo for lower costs")
+    print("   6. Consider using GPT-5-nano for ultra-low costs on simple tasks")
 
 if __name__ == "__main__":
     analyze_cost_breakdown()

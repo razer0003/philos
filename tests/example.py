@@ -14,7 +14,7 @@ def setup_example_env():
         
         example_env = """# AI Companion Environment Variables
 OPENAI_API_KEY=your_openai_api_key_here
-GPT_MODEL=gpt-4
+GPT_MODEL=gpt-5-mini
 MAX_TOKENS=2048
 TEMPERATURE=0.7
 

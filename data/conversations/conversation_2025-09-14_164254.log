@@ -1,0 +1,44 @@
+{
+  "conversation_id": "session_20250914_1642",
+  "start_time": "2025-09-14 16:42:54.946942",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "8161eba6-ea2c-4fbd-a068-fe108d7e906a",
+      "timestamp": "2025-09-14 16:42:54.946969",
+      "sender": "user",
+      "content": "search up the wikipedia page for charles darwin and read me the first line",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "40d94eb4-dda4-4969-9f1b-f10ecf033aed",
+      "timestamp": "2025-09-14 16:42:54.946977",
+      "sender": "ai_companion",
+      "content": "You asked me to look up Darwin\u2019s Wikipedia page and read the first line, so I ran a quick search for \u201cCharles Darwin Wikipedia\u201d to pull the page text.\n\nI checked the top result \u2014 here\u2019s the opening line I found on the Charles Darwin Wikipedia entry:\n\n\"Charles Robert Darwin ( DAR-win; 12 February 1809 \u2013 19 April 1882) was an English naturalist, geologist, and biologist, widely known for his contributions to evolutionary biology.\"\n\nThere was also a different result for Sir Charles Galton Darwin (a physicist, grandson of Charles Darwin) if that\u2019s relevant. This is from the Wikipedia page I pulled just now \u2014 if you want, I can read the next sentence or the full introductory section. Want me to continue?",
+      "emotion_state": {
+        "timestamp": "2025-09-14 16:42:54.946919",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: search up the wikipedia page for charles darwin an"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-14 16:42:54.946919",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: search up the wikipedia page for charles darwin an"
+    }
+  ]
+}

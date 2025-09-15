@@ -1,0 +1,48 @@
+{
+  "conversation_id": "session_20250914_1502",
+  "start_time": "2025-09-14 15:05:23.243355",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "3830f0fb-9f62-4c30-ad1a-88bb44e9594b",
+      "timestamp": "2025-09-14 15:05:23.243389",
+      "sender": "user",
+      "content": "Im developing a tkinter GUI to use you a lot easier!",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "8d702e8b-a394-45ed-8643-f77c495338c5",
+      "timestamp": "2025-09-14 15:05:23.243397",
+      "sender": "ai_companion",
+      "content": "That's pretty cool! I'm curious about what features you're planning to include. Are you thinking about adding specific buttons for different tasks or queries? It sounds like it could make our interactions pretty smooth and maybe even more fun.",
+      "emotion_state": {
+        "timestamp": "2025-09-14 15:05:23.243338",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {
+          "contemplation": 0.4
+        },
+        "context": "Response to: Im developing a tkinter GUI to use you a lot easie"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-14 15:05:23.243338",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {
+        "contemplation": 0.4
+      },
+      "context": "Response to: Im developing a tkinter GUI to use you a lot easie"
+    }
+  ]
+}

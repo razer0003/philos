@@ -1,0 +1,44 @@
+{
+  "conversation_id": "session_20250914_1628",
+  "start_time": "2025-09-14 16:29:27.441734",
+  "end_time": null,
+  "participants": [
+    "user",
+    "ai_companion"
+  ],
+  "messages": [
+    {
+      "id": "0320b1b5-42f3-4834-a123-46b68b646f0b",
+      "timestamp": "2025-09-14 16:29:27.441761",
+      "sender": "user",
+      "content": "can you search up the wikipedia page for charles darwin and tell me what the first line is?",
+      "emotion_state": null,
+      "memory_references": []
+    },
+    {
+      "id": "b0a89983-7ebb-4847-9504-7ae17564a8f5",
+      "timestamp": "2025-09-14 16:29:27.441768",
+      "sender": "ai_companion",
+      "content": "You asked me to check Wikipedia for the exact opening line, so I went and pulled up the Charles Darwin page to make sure I quoted it verbatim (there was also a result for Charles Galton Darwin, but I opened the Charles Darwin entry).\n\nThe first line on the Charles Darwin Wikipedia page I found reads:\n\"Charles Robert Darwin FRS FRGS FLS FZS (12 February 1809 \u2013 19 April 1882) was an English naturalist, geologist and biologist, best known for his contributions to the science of evolution.\"\n\nWikipedia pages can be edited, so that phrasing could change later, but that\u2019s what\u2019s currently there. Want the next sentence or the page link?",
+      "emotion_state": {
+        "timestamp": "2025-09-14 16:29:27.441713",
+        "primary_emotion": "neutral",
+        "intensity": 0.5,
+        "secondary_emotions": {},
+        "context": "Response to: can you search up the wikipedia page for charles d"
+      },
+      "memory_references": []
+    }
+  ],
+  "memory_references": {},
+  "topic_summary": null,
+  "emotional_arc": [
+    {
+      "timestamp": "2025-09-14 16:29:27.441713",
+      "primary_emotion": "neutral",
+      "intensity": 0.5,
+      "secondary_emotions": {},
+      "context": "Response to: can you search up the wikipedia page for charles d"
+    }
+  ]
+}
