@@ -30,6 +30,7 @@ class WebSearchManager:
         self.logger = logging.getLogger(__name__)
         self.status_callback = status_callback  # Callback for live updates
         self.openai_client = openai_client  # OpenAI client for query restructuring
+        self.browser_activity_window = None  # Reference to browser activity window
         
         # User agent to avoid blocking
         self.headers = {
@@ -56,7 +57,28 @@ class WebSearchManager:
         """Send status update to callback if available"""
         if self.status_callback:
             self.status_callback(message)
+        if self.browser_activity_window:
+            self.browser_activity_window.update_search_status(message)
         self.logger.info(f"Search Status: {message}")
+        
+    def set_browser_activity_window(self, window):
+        """Set reference to browser activity window for detailed logging"""
+        self.browser_activity_window = window
+        
+    def _notify_source_access(self, source_type: str, url: str, description: str):
+        """Notify browser activity window about source access"""
+        if self.browser_activity_window:
+            self.browser_activity_window.add_source_accessed(source_type, url, description)
+            
+    def _notify_result_found(self, result: dict):
+        """Notify browser activity window about a search result"""
+        if self.browser_activity_window:
+            self.browser_activity_window.add_search_result(result)
+            
+    def _notify_ai_decision(self, decision_type: str, decision: str, reasoning: str = ""):
+        """Notify browser activity window about AI decisions"""
+        if self.browser_activity_window:
+            self.browser_activity_window.add_ai_decision(decision_type, decision, reasoning)
     
     def clear_search_cache(self):
         """Clear the search cache to prevent cross-conversation contamination"""
@@ -166,18 +188,34 @@ class WebSearchManager:
             
             # Special handling for dead/alive queries with no definitive results
             if any(word in query.lower() for word in ['dead or alive', 'died', 'death']) and len(unique_results) < 2:
-                person_name = query.lower().replace(' dead or alive', '').replace(' is ', '').replace(' died', '').strip()
+                person_name = query.lower().replace(' death', '').replace(' dead or alive', '').replace(' is ', '').replace(' died', '').replace(' news on ', '').replace(' consensus', '').strip()
                 
-                # If we can't find any death announcements, the person is likely alive
-                self._update_status("No death announcements found - person likely alive")
-                unique_results.insert(0, {
-                    'title': f'Status Check: {person_name.title()}',
-                    'content': f'No recent death announcements or obituaries found for {person_name}. Based on the absence of death-related news in major sources, {person_name} is likely still alive as of September 2025. This conclusion is based on the principle that significant deaths are typically widely reported.',
-                    'url': '',
-                    'type': 'status_inference',
-                    'timestamp': datetime.now(),
-                    'source': 'search_analysis'
-                })
+                # Check if existing results already contain definitive death information
+                has_death_info = False
+                for result in unique_results:
+                    content = result.get('content', '').lower()
+                    title = result.get('title', '').lower()
+                    # Look for clear death indicators in the content
+                    death_indicators = ['died', 'death', 'killed', 'fatally', 'obituary', 'passed away', '– september', '– october', '– november', '– december', '– january', '– february', '– march', '– april', '– may', '– june', '– july', '– august']
+                    if any(indicator in content or indicator in title for indicator in death_indicators):
+                        # Also check for birth-death date patterns like "(1993 – 2025)"
+                        if '–' in content or '—' in content:
+                            has_death_info = True
+                            break
+                
+                # Only add status inference if we don't already have definitive death information
+                if not has_death_info:
+                    self._update_status("Insufficient search results - recommend trying different sources")
+                    unique_results.insert(0, {
+                        'title': f'Search Status: {person_name.title()}',
+                        'content': f'Limited information found in current search for {person_name}. This could indicate either that the person is alive or that the information is not easily accessible through the searched sources. For definitive status information, recommend checking official sources, recent news, or biographical resources directly.',
+                        'url': '',
+                        'type': 'search_status',
+                        'timestamp': datetime.now(),
+                        'source': 'search_analysis'
+                    })
+                else:
+                    self._update_status("Found definitive biographical information")
             
             final_results = unique_results[:max_results]
             self._update_status(f"Search complete: {len(final_results)} results found")
@@ -281,6 +319,7 @@ class WebSearchManager:
                 # Use regex to extract person's name more accurately
                 # Look for patterns like "charlie kirk's death" -> "charlie kirk"
                 name_patterns = [
+                    r"news\s+on\s+(.+?)'s\s+death",  # "news on charlie kirk's death"
                     r"(.+?)'s\s+death",  # "charlie kirk's death" 
                     r"(.+?)\s+died",     # "charlie kirk died"
                     r"(.+?)\s+death",    # "charlie kirk death"
@@ -295,13 +334,15 @@ class WebSearchManager:
                     match = re.search(pattern, person_name)
                     if match:
                         extracted_name = match.group(1).strip()
+                        # Clean up extracted name from common prefixes
+                        extracted_name = re.sub(r'^(news|on|about)\s+', '', extracted_name)
                         break
                 
                 if extracted_name:
                     search_query = extracted_name
                 else:
                     # Fallback: remove common phrases but preserve apostrophes
-                    remove_phrases = [' dead or alive', ' died', ' death', ' is dead', ' current', ' status', ' president of']
+                    remove_phrases = [' dead or alive', ' died', ' death', ' is dead', ' current', ' status', ' president of', 'news on ', 'news about ', ' the consensus']
                     for phrase in remove_phrases:
                         person_name = person_name.replace(phrase, '')
                     search_query = person_name.strip()
@@ -317,6 +358,9 @@ class WebSearchManager:
                 'srsearch': search_query,
                 'srlimit': 5  # Get more to filter
             }
+            
+            # Notify browser activity about accessing Wikipedia
+            self._notify_source_access("Wikipedia API", search_url, f"Searching for '{search_query}'")
             
             response = requests.get(search_url, params=params, headers=self.headers, timeout=10)
             
@@ -356,12 +400,16 @@ class WebSearchManager:
                             if extract and len(extract) > 50:
                                 # Log the first 200 characters to see what we're getting
                                 self.logger.info(f"Wikipedia extract for '{title}': {extract[:200]}...")
-                                results.append({
+                                result = {
                                     'title': title,
                                     'content': extract[:500] + ('...' if len(extract) > 500 else ''),
                                     'url': f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}",
-                                    'type': 'wikipedia'
-                                })
+                                    'type': 'wikipedia',
+                                    'source': 'Wikipedia'
+                                }
+                                results.append(result)
+                                # Notify browser activity about this result
+                                self._notify_result_found(result)
                                 break
                     
                     # Stop after finding 3 relevant results
@@ -454,9 +502,12 @@ YES or NO:"""
                 
                 if ai_decision in ["YES", "NO"]:
                     self.logger.info(f"AI search decision: '{user_query}' -> {ai_decision}")
+                    # Notify browser activity about AI decision
+                    self._notify_ai_decision("Search Decision", ai_decision, f"AI analyzed: '{user_query}' and decided {ai_decision}")
                     return ai_decision == "YES"
                 else:
                     self.logger.warning(f"AI returned unexpected response: '{ai_decision}', using fallback")
+                    self._notify_ai_decision("Search Decision", f"FALLBACK (AI said: {ai_decision})", "AI gave unexpected response, using pattern matching fallback")
                     
             except Exception as e:
                 self.logger.warning(f"AI search decision failed: {e}, using pattern fallback")
@@ -631,27 +682,19 @@ YES or NO:"""
             
             client = self.openai_client
             
-            restructure_prompt = f"""You are a search query optimizer. Extract clean search terms from user requests.
+            restructure_prompt = f"""Extract search terms from: "{user_input}"
 
-Input: "{user_input}"
+Return only the main topic to search for. Remove filler words like "search", "up", "for me", "can you".
 
-TASK: If the user wants to search for something, return ONLY the search terms. If not, return SKIP.
+Examples:
+- "search up the consensus of charlie kirk's death for me" → "Charlie Kirk death"
+- "look up who the current king of england is" → "current king england"
+- "can you search charles darwin wikipedia" → "Charles Darwin"
+- "find out about climate change effects" → "climate change effects"
 
-RULES:
-- Extract the main topic/person/thing they want to find
-- Remove conversational words like "can you", "search up", "look up", "google"
-- Keep it 2-6 words
-- Be specific about what they're looking for
+If there's nothing clear to search for, return "SKIP".
 
-EXAMPLES:
-"look up who the current king of england is" -> current king england
-"search up the wikipedia page for charles darwin" -> Charles Darwin Wikipedia
-"google the latest iPhone release date" -> latest iPhone release date
-"can you find information about climate change" -> climate change information
-"nothing much just chatting" -> SKIP
-"search it up" -> SKIP
-
-Your response (search terms only OR SKIP):"""
+Search terms:"""
 
             # Use GPT-5 nano for query restructuring
             response = client.chat.completions.create(
@@ -665,6 +708,8 @@ Your response (search terms only OR SKIP):"""
             
             # Debug logging (avoid unicode issues)
             self.logger.info(f"AI query restructuring: '{user_input}' -> '{cleaned_query}'")
+            # Notify browser activity about query extraction
+            self._notify_ai_decision("Query Extraction", cleaned_query, f"GPT-5-nano extracted from: '{user_input}'")
             
             # Handle the response
             if cleaned_query.upper() == "SKIP":
@@ -693,6 +738,27 @@ Your response (search terms only OR SKIP):"""
         """
         Fallback basic query extraction when AI restructuring fails
         """
+        import re
+        
+        # Special patterns for death/status queries
+        death_patterns = [
+            (r'search up.*?news.*?on\s+(.+?)\'s\s+death.*?consensus', r'\1 death'),
+            (r'search up.*?consensus.*?of\s+(.+?)\'s\s+death', r'\1 death'),
+            (r'news.*?on\s+(.+?)\'s\s+death', r'\1 death'),
+            (r'(.+?)\'s\s+death.*?consensus', r'\1 death'),
+            (r'(.+?)\s+death.*?news', r'\1 death'),
+        ]
+        
+        # Try death-specific patterns first
+        for pattern, replacement in death_patterns:
+            match = re.search(pattern, user_input.lower())
+            if match:
+                name = match.group(1).strip()
+                # Proper case the name
+                name_parts = name.split()
+                proper_name = ' '.join([part.capitalize() for part in name_parts if part])
+                return f"{proper_name} death"
+        
         # Split into sentences and find the one with the actual question
         sentences = user_input.split('.')
         main_question = ""
@@ -1351,12 +1417,33 @@ Your response (search terms only OR SKIP):"""
         
         for result in results:
             url = result.get('url', '')
-            title = result.get('title', '').lower()
+            title = result.get('title', '').lower().strip()
             
-            # Skip if we've seen this URL or very similar title
+            # Skip if we've seen this exact URL
             if url and url in seen_urls:
                 continue
-            if title and any(title in seen_title or seen_title in title for seen_title in seen_titles):
+            
+            # For titles, only consider them duplicates if they are very similar (not just contained)
+            is_duplicate_title = False
+            if title:
+                for seen_title in seen_titles:
+                    # Only consider duplicate if titles are nearly identical (>80% similar length)
+                    # or if they are exactly the same after removing common words
+                    title_clean = title.replace('killing of ', '').replace('death of ', '').replace('the ', '')
+                    seen_clean = seen_title.replace('killing of ', '').replace('death of ', '').replace('the ', '')
+                    
+                    # Exact match after cleaning
+                    if title_clean == seen_clean and len(title_clean) > 5:
+                        # But allow if one is specifically about death/killing and other is general
+                        if ('killing' in title or 'death' in title) and ('killing' not in seen_title and 'death' not in seen_title):
+                            continue  # Allow this as it's more specific
+                        elif ('killing' in seen_title or 'death' in seen_title) and ('killing' not in title and 'death' not in title):
+                            continue  # Allow this as it's more specific
+                        else:
+                            is_duplicate_title = True
+                            break
+            
+            if is_duplicate_title:
                 continue
             
             unique_results.append(result)
@@ -1615,6 +1702,8 @@ TIME_FOCUS: [recent/current/historical/any]
             search_url = f"https://old.reddit.com/search?q={quote_plus(query)}&sort=relevance&t=all"
             
             self._update_status("Searching Reddit discussions...")
+            # Notify browser activity about Reddit access
+            self._notify_source_access("Reddit", search_url, f"Searching Reddit for '{query}'")
             
             response = requests.get(search_url, headers=self.headers, timeout=12)
             
@@ -1654,14 +1743,17 @@ TIME_FOCUS: [recent/current/historical/any]
                         else:
                             content = f"Reddit discussion about {query}"
                         
-                        results.append({
+                        result = {
                             'title': f"[{subreddit}] {title}",
                             'content': content,
                             'url': post_url,
                             'type': 'reddit_post',
                             'score': score,
                             'source': 'Reddit'
-                        })
+                        }
+                        results.append(result)
+                        # Notify browser activity about this result
+                        self._notify_result_found(result)
                         
                     except Exception as e:
                         self.logger.debug(f"Error parsing Reddit post: {e}")

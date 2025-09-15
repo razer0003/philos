@@ -135,6 +135,13 @@ Remember: You're not an AI assistant. You're Philos - an individual having conve
     def set_browser_activity_callback(self, callback):
         """Set callback for browser activity updates"""
         self.browser_activity_callback = callback
+        
+    def set_browser_activity_window(self, window):
+        """Set browser activity window for detailed logging"""
+        self.browser_activity_window = window
+        # Connect the web search to the browser activity window
+        if self.web_search:
+            self.web_search.set_browser_activity_window(window)
 
     def _search_status_callback(self, status_message: str):
         """Handle live search status updates"""
@@ -425,9 +432,12 @@ Keep it short (1-2 sentences max) and speak like yourself - Philos."""
                     # Notify browser activity of the search being initiated
                     if hasattr(self, 'browser_activity_window') and self.browser_activity_window:
                         try:
-                            self.browser_activity_window.add_search_to_history(search_query, search_reasoning)
+                            # Update current query display
+                            self.browser_activity_window.update_current_query(search_query, user_input)
+                            # Log the AI decision to trigger search
+                            self.browser_activity_window.add_ai_decision("Search Trigger", "YES", search_reasoning)
                         except Exception as e:
-                            logging.warning(f"Failed to update browser search history: {e}")
+                            logging.warning(f"Failed to update browser activity: {e}")
                     
                     # Perform intelligent search with refinement and live updates
                     search_result = self.web_search.search_with_refinement(

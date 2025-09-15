@@ -262,8 +262,8 @@ class PhilosMainGUI:
         
     def _open_browser_activity(self):
         """Open Browser Activity window"""
-        if self.browser_window and self.browser_window.winfo_exists():
-            self.browser_window.lift()
+        if self.browser_window and hasattr(self.browser_window, 'window') and self.browser_window.window.winfo_exists():
+            self.browser_window.window.lift()
             return
             
         self.browser_window = BrowserActivity(self.root, self.philos)
@@ -1433,67 +1433,166 @@ class BrowserActivity:
         # Set up web search callback to receive updates
         if hasattr(philos, 'consciousness_engine'):
             philos.consciousness_engine.set_browser_activity_callback(self.update_search_status)
-            # Also set up the browser activity reference for search history
-            philos.consciousness_engine.browser_activity_window = self
+            # Set up the detailed browser activity connection
+            philos.consciousness_engine.set_browser_activity_window(self)
         
         self._setup_browser_interface()
         
     def _setup_browser_interface(self):
-        """Set up browser activity interface"""
-        # Search history
-        history_frame = tk.LabelFrame(
-            self.window,
-            text="Search History",
+        """Set up enhanced browser activity interface"""
+        # Create notebook for tabs
+        notebook = ttk.Notebook(self.window)
+        notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        
+        # Tab 1: Current Search Progress
+        progress_frame = tk.Frame(notebook, bg='#2b2b2b')
+        notebook.add(progress_frame, text="Current Search")
+        
+        # Current search query
+        query_frame = tk.LabelFrame(
+            progress_frame,
+            text="Search Query",
             bg='#2b2b2b',
             fg='white',
-            font=('Arial', 12, 'bold')
+            font=('Arial', 10, 'bold')
         )
-        history_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        query_frame.pack(fill=tk.X, padx=5, pady=2)
         
-        self.search_history = tk.Listbox(
-            history_frame,
+        self.current_query_display = tk.Text(
+            query_frame,
             bg='#1e1e1e',
-            fg='white',
-            font=('Consolas', 10)
+            fg='#4CAF50',
+            font=('Consolas', 11, 'bold'),
+            height=2,
+            wrap=tk.WORD
         )
-        self.search_history.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        self.current_query_display.pack(fill=tk.X, padx=5, pady=2)
         
-        # Thought process
-        thought_frame = tk.LabelFrame(
-            self.window,
-            text="Search Reasoning",
+        # Real-time search progress
+        progress_frame_inner = tk.LabelFrame(
+            progress_frame,
+            text="Search Progress",
             bg='#2b2b2b',
             fg='white',
-            font=('Arial', 12, 'bold')
+            font=('Arial', 10, 'bold')
         )
-        thought_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        progress_frame_inner.pack(fill=tk.BOTH, expand=True, padx=5, pady=2)
         
-        self.thought_display = scrolledtext.ScrolledText(
-            thought_frame,
+        self.progress_display = scrolledtext.ScrolledText(
+            progress_frame_inner,
             bg='#1e1e1e',
-            fg='white',
-            font=('Consolas', 10)
+            fg='#87CEEB',
+            font=('Consolas', 9),
+            height=15
         )
-        self.thought_display.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        self.progress_display.pack(fill=tk.BOTH, expand=True, padx=5, pady=2)
+        
+        # Tab 2: Sources & URLs
+        sources_frame = tk.Frame(notebook, bg='#2b2b2b')
+        notebook.add(sources_frame, text="Sources & URLs")
+        
+        # Sources visited
+        sources_list_frame = tk.LabelFrame(
+            sources_frame,
+            text="Websites & Sources Accessed",
+            bg='#2b2b2b',
+            fg='white',
+            font=('Arial', 10, 'bold')
+        )
+        sources_list_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=2)
+        
+        self.sources_display = scrolledtext.ScrolledText(
+            sources_list_frame,
+            bg='#1e1e1e',
+            fg='#FFD700',
+            font=('Consolas', 9)
+        )
+        self.sources_display.pack(fill=tk.BOTH, expand=True, padx=5, pady=2)
+        
+        # Tab 3: Search Results
+        results_frame = tk.Frame(notebook, bg='#2b2b2b')
+        notebook.add(results_frame, text="Results Found")
+        
+        self.results_display = scrolledtext.ScrolledText(
+            results_frame,
+            bg='#1e1e1e',
+            fg='#98FB98',
+            font=('Consolas', 9)
+        )
+        self.results_display.pack(fill=tk.BOTH, expand=True, padx=5, pady=2)
+        
+        # Tab 4: AI Decision Making
+        ai_frame = tk.Frame(notebook, bg='#2b2b2b')
+        notebook.add(ai_frame, text="AI Decisions")
+        
+        self.ai_display = scrolledtext.ScrolledText(
+            ai_frame,
+            bg='#1e1e1e',
+            fg='#DDA0DD',
+            font=('Consolas', 9)
+        )
+        self.ai_display.pack(fill=tk.BOTH, expand=True, padx=5, pady=2)
+        
+        # Initialize search session tracking
+        self.current_search_session = {}
+        self.search_sessions = []
         
         # Start monitoring for search activities
         self._monitor_search_activities()
     
     def update_search_status(self, status):
         """Update the current search status in real-time"""
-        if hasattr(self, 'thought_display'):
-            self.thought_display.insert(tk.END, f"[{datetime.now().strftime('%H:%M:%S')}] {status}\n")
-            self.thought_display.see(tk.END)
+        if hasattr(self, 'progress_display'):
+            timestamp = datetime.now().strftime('%H:%M:%S')
+            self.progress_display.insert(tk.END, f"[{timestamp}] {status}\n")
+            self.progress_display.see(tk.END)
+            
+    def update_current_query(self, query, user_input):
+        """Update the current search query display"""
+        if hasattr(self, 'current_query_display'):
+            self.current_query_display.delete(1.0, tk.END)
+            display_text = f"User: {user_input}\nExtracted Query: {query}"
+            self.current_query_display.insert(tk.END, display_text)
+            
+    def add_source_accessed(self, source_type, url, description):
+        """Add information about a source/website being accessed"""
+        if hasattr(self, 'sources_display'):
+            timestamp = datetime.now().strftime('%H:%M:%S')
+            self.sources_display.insert(tk.END, f"[{timestamp}] {source_type.upper()}\n")
+            self.sources_display.insert(tk.END, f"  URL: {url}\n")
+            self.sources_display.insert(tk.END, f"  Description: {description}\n\n")
+            self.sources_display.see(tk.END)
+            
+    def add_search_result(self, result):
+        """Add a search result to the results display"""
+        if hasattr(self, 'results_display'):
+            timestamp = datetime.now().strftime('%H:%M:%S')
+            title = result.get('title', 'No Title')
+            url = result.get('url', 'No URL')
+            content = result.get('content', 'No Content')[:200] + "..."
+            source = result.get('source', result.get('type', 'Unknown'))
+            
+            self.results_display.insert(tk.END, f"[{timestamp}] {source.upper()}: {title}\n")
+            self.results_display.insert(tk.END, f"  URL: {url}\n")
+            self.results_display.insert(tk.END, f"  Content: {content}\n\n")
+            self.results_display.see(tk.END)
+            
+    def add_ai_decision(self, decision_type, decision, reasoning):
+        """Add AI decision making information"""
+        if hasattr(self, 'ai_display'):
+            timestamp = datetime.now().strftime('%H:%M:%S')
+            self.ai_display.insert(tk.END, f"[{timestamp}] {decision_type.upper()}\n")
+            self.ai_display.insert(tk.END, f"  Decision: {decision}\n")
+            if reasoning:
+                self.ai_display.insert(tk.END, f"  Reasoning: {reasoning}\n\n")
+            else:
+                self.ai_display.insert(tk.END, "\n")
+            self.ai_display.see(tk.END)
     
     def add_search_to_history(self, search_query, reasoning):
-        """Add a completed search to the history"""
-        if hasattr(self, 'search_history'):
-            timestamp = datetime.now().strftime('%H:%M:%S')
-            self.search_history.insert(0, f"[{timestamp}] {search_query}")
-            
-        if hasattr(self, 'thought_display') and reasoning:
-            self.thought_display.insert(tk.END, f"\n--- Search Reasoning ---\n{reasoning}\n\n")
-            self.thought_display.see(tk.END)
+        """Add a completed search to the history (legacy method for compatibility)"""
+        # This method is kept for backward compatibility but now uses the new interface
+        pass
     
     def _monitor_search_activities(self):
         """Monitor for new search activities"""
